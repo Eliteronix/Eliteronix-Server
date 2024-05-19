@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Elitebotix Bingo</title>
+</head>
+
+<body>
+	<img src="" alt="Elitebotix Bingo" style="width:250;height:250; border: 10px solid black;" id="bingocard">
+
+	<script>
+		async function getCurrentBingoGame() {
+			// Fetch the current bingo board
+			fetch(`${window.location.origin}/currentbingo?u=${playerId}`)
+				.then(response => response.json())
+				.then(data => {
+					currentBingo = data;
+
+					if (currentBingo.message) {
+						bingoCardUrl = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
+						document.getElementById('bingocard').src = bingoCardUrl;
+
+						document.getElementById('bingocard').style.border = `10px solid ${currentBingo.team.replace('Team ', '').toLowerCase()}`;
+					} else {
+						bingoCardUrl = null;
+						document.getElementById('bingocard').src = '';
+
+						document.getElementById('bingocard').style.border = '1px solid black';
+					}
+				});
+		}
+
+		// Get the player id from the URL
+		const urlParams = new URLSearchParams(window.location.search);
+		const playerId = urlParams.get('u');
+
+		let currentBingo = getCurrentBingoGame();
+		let bingoCardUrl = null;
+
+		setInterval(() => {
+			getCurrentBingoGame();
+		}, 5000);
+	</script>
+</body>
+
+</html>
