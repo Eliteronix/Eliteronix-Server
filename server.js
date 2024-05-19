@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
+require('dotenv').config();
 
 // Define the HTTP server
 const browserSourceServer = http.createServer(async (req, res) => {
@@ -16,8 +17,8 @@ const browserSourceServer = http.createServer(async (req, res) => {
 			return;
 		}
 
-		// Check if the image exists
-		if (!fs.existsSync(`./duelratingcards/${osuUserId}.png`)) {
+		// Check if the image exists 
+		if (!fs.existsSync(`${process.env.ELITEBOTIXROOTPATH}/duelratingcards/${osuUserId}.png`)) {
 			res.setHeader('Content-Type', 'text/plain');
 			res.end('Please create the image using /osu-duel rating');
 			return;
@@ -25,7 +26,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 
 		// Send the image from the duelratingcards folder
 		res.setHeader('Content-Type', 'image/png');
-		res.end(fs.readFileSync(`./duelratingcards/${osuUserId}.png`));
+		res.end(fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/duelratingcards/${osuUserId}.png`));
 	} else if (route.startsWith('/history/')) {
 		const osuUserId = route.replace('/history/', '');
 
@@ -36,7 +37,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		}
 
 		// Check if the image exists
-		if (!fs.existsSync(`./historycards/${osuUserId}.png`)) {
+		if (!fs.existsSync(`${process.env.ELITEBOTIXROOTPATH}/historycards/${osuUserId}.png`)) {
 			res.setHeader('Content-Type', 'text/plain');
 			res.end('Please create the image using /osu-history');
 			return;
@@ -44,7 +45,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 
 		// Send the image from the duelratingcards folder
 		res.setHeader('Content-Type', 'image/png');
-		res.end(fs.readFileSync(`./historycards/${osuUserId}.png`));
+		res.end(fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/historycards/${osuUserId}.png`));
 	} else if (route.startsWith('/historywithdetails/')) {
 		const osuUserId = route.replace('/historywithdetails/', '');
 
@@ -55,7 +56,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		}
 
 		// Check if the image exists
-		if (!fs.existsSync(`./historycardswithdetails/${osuUserId}.png`)) {
+		if (!fs.existsSync(`${process.env.ELITEBOTIXROOTPATH}/historycardswithdetails/${osuUserId}.png`)) {
 			res.setHeader('Content-Type', 'text/plain');
 			res.end('Please create the image using /osu-history showtournamentdetails:true');
 			return;
@@ -63,7 +64,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 
 		// Send the image from the duelratingcards folder
 		res.setHeader('Content-Type', 'image/png');
-		res.end(fs.readFileSync(`./historycardswithdetails/${osuUserId}.png`));
+		res.end(fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/historycardswithdetails/${osuUserId}.png`));
 	} else if (route.startsWith('/wrapped/')) {
 		const year = route.replace('/wrapped/', '').split('/')[0];
 
@@ -82,7 +83,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		}
 
 		// Check if the image exists
-		if (!fs.existsSync(`./wrappedcards/${year}/${osuUserId}.png`)) {
+		if (!fs.existsSync(`${process.env.ELITEBOTIXROOTPATH}/wrappedcards/${year}/${osuUserId}.png`)) {
 			res.setHeader('Content-Type', 'text/plain');
 			res.end(`Please create the image using /osu-wrapped year:${year}`);
 			return;
@@ -90,7 +91,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 
 		// Send the image from the duelratingcards folder
 		res.setHeader('Content-Type', 'image/png');
-		res.end(fs.readFileSync(`./wrappedcards/${year}/${osuUserId}.png`));
+		res.end(fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/wrappedcards/${year}/${osuUserId}.png`));
 	} else if (route.startsWith('/mappack/')) {
 		const mappackId = route.replace('/mappack/', '');
 
@@ -101,7 +102,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		}
 
 		// Check if the zip exists
-		if (!fs.existsSync(`./mappacks/${mappackId}.zip`)) {
+		if (!fs.existsSync(`${process.env.ELITEBOTIXROOTPATH}/mappacks/${mappackId}.zip`)) {
 			res.setHeader('Content-Type', 'text/plain');
 			res.end('Please create the mappack using /osu-mappool mappack');
 			return;
@@ -109,7 +110,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 
 		// Provide the zip file
 		res.setHeader('Content-Type', 'application/zip');
-		res.end(fs.readFileSync(`./mappacks/${mappackId}.zip`));
+		res.end(fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/mappacks/${mappackId}.zip`));
 	}
 });
 
