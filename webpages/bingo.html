@@ -16,16 +16,12 @@
 				.then(data => {
 					currentBingo = data;
 
-					if (currentBingo.message) {
-						bingoCardUrl = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
-						document.getElementById('bingocard').src = bingoCardUrl;
+					document.getElementById('bingocard').src = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
 
+					if (currentBingo.message) {
 						document.getElementById('bingocard').style.border = `10px solid ${currentBingo.team.replace('Team ', '').toLowerCase()}`;
 					} else {
-						bingoCardUrl = null;
-						document.getElementById('bingocard').src = '';
-
-						document.getElementById('bingocard').style.border = '1px solid black';
+						document.getElementById('bingocard').style.border = '10px solid black';
 					}
 				});
 		}
@@ -35,7 +31,6 @@
 		const playerId = urlParams.get('u');
 
 		let currentBingo = getCurrentBingoGame();
-		let bingoCardUrl = null;
 
 		setInterval(() => {
 			getCurrentBingoGame();
