@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Elitebotix Bingo</title>
+	<link rel="stylesheet" type="text/css" id="bingo-css">
+	<style>
+		.submission {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 10px;
+			top: 45%;
+			position: absolute;
+		}
+
+		input {
+			width: 300px;
+			height: 30px;
+			font-size: 20px;
+			text-align: center;
+			background-color: rgb(4, 0, 8);
+			color: white;
+			border: 2px solid white;
+			border-radius: 5px;
+			margin: 10px;
+		}
+
+		button {
+			width: 100px;
+			height: 30px;
+			font-size: 20px;
+			text-align: center;
+			background-color: rgb(4, 0, 8);
+			color: white;
+			border: 2px solid white;
+			border-radius: 5px;
+			margin: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<script>
+		document.getElementById('bingo-css').href = `${window.location.origin}/bingo-css`;
+	</script>
+
+	<div class="gradient"></div>
+	<div class="submission">
+		<input type="text" placeholder="Enter your osu! user ID here">
+		<button>Continue</button>
+	</div>
+
+	<script>
+		document.querySelector('button').addEventListener('click', () => {
+			const playerId = document.querySelector('input').value;
+			window.location.href = `${window.location.origin}/bingo?u=${playerId}`;
+		});
+
+		document.querySelector('input').addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') {
+				const playerId = document.querySelector('input').value;
+				window.location.href = `${window.location.origin}/bingo?u=${playerId}`;
+			}
+		});
+	</script>
+</body>
+
+</html>
