@@ -18,6 +18,10 @@
 
 					document.getElementById('bingocard').src = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
 
+					// Scale the image to 250x250
+					document.getElementById('bingocard').style.width = '250px';
+					document.getElementById('bingocard').style.height = '250px';
+
 					if (currentBingo.message) {
 						document.getElementById('bingocard').style.border = `10px solid ${currentBingo.team.replace('Team ', '').toLowerCase()}`;
 					} else {
