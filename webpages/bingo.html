@@ -6,7 +6,7 @@
 </head>
 
 <body>
-	<img src="" alt="Elitebotix Bingo" style="width:250;height:250; border: 10px solid black;" id="bingocard">
+	<img src="" alt="Elitebotix Bingo" style="width:500;height:500; border: 10px solid black;" id="bingocard">
 
 	<script>
 		async function getCurrentBingoGame() {
@@ -18,9 +18,9 @@
 
 					document.getElementById('bingocard').src = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
 
-					// Scale the image to 250x250
-					document.getElementById('bingocard').style.width = '250px';
-					document.getElementById('bingocard').style.height = '250px';
+					// Scale the image to 500x500
+					document.getElementById('bingocard').style.width = '500px';
+					document.getElementById('bingocard').style.height = '500px';
 
 					if (currentBingo.message) {
 						document.getElementById('bingocard').style.border = `10px solid ${currentBingo.team.replace('Team ', '').toLowerCase()}`;
