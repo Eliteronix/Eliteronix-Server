@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Match Overlay</title>
+</head>
+
+<body>
+	<img src="" alt="Matchoverlay Background" style="width:500;height:250;" id="matchoverlay-background">
+
+	<script>
+		document.getElementById('matchoverlay-background').src = `${window.location.origin}/osu-background`;
+		document.getElementById('matchoverlay-background').style.width = '500px';
+		document.getElementById('matchoverlay-background').style.height = '250px';
+
+		async function getCurrentMatchId() {
+			// Fetch the current bingo board
+			fetch(`${window.location.origin}/currentmatch?u=${playerId}`)
+				.then(response => response.json())
+				.then(data => {
+					currentMatchId = data.matchId;
+				});
+		}
+
+		// async function getCurrentMatch() {
+		// 	// Fetch the current bingo board
+		// 	fetch(`${window.location.origin}/currentbingo?u=${playerId}`)
+		// 		.then(response => response.json())
+		// 		.then(data => {
+		// 			currentBingo = data;
+
+		// 			document.getElementById('matchoverlay').src = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
+
+		// 			// Scale the image to 500x250
+		// 			document.getElementById('matchoverlay').style.width = '500px';
+		// 			document.getElementById('matchoverlay').style.height = '250px';
+		// 		});
+		// }
+
+		// Get the player id from the URL
+		const urlParams = new URLSearchParams(window.location.search);
+		const playerId = urlParams.get('u');
+
+		let currentMatchId = null;
+
+		getCurrentMatchId();
+
+		setInterval(() => {
+			getCurrentMatchId();
+		}, 60000);
+	</script>
+</body>
+
+</html>
