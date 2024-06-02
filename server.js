@@ -12,13 +12,16 @@ const browserSourceServer = http.createServer(async (req, res) => {
 	try {
 		let endpoint = require(`./routes/${args.shift()}.js`);
 
-		endpoint.execute(req, res, args).catch(() => {
+		endpoint.execute(req, res, args).catch((e) => {
+			console.error(e);
+
 			// If an error occurs, return a 500
 			res.statusCode = 500;
 			res.setHeader('Content-Type', 'text/plain');
 			res.end('Internal server error');
 		});
 	} catch (error) {
+		console.error(error);
 		// If the route does not exist, return a 404
 		res.statusCode = 404;
 		res.setHeader('Content-Type', 'text/plain');

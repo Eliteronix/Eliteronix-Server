@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Eliteronix/Eliteronix-Server#readme",
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7"
   }
 }
