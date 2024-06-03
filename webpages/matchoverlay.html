@@ -3,15 +3,23 @@
 
 <head>
 	<title>Match Overlay</title>
+	<link rel="stylesheet" type="text/css" id="matchoverlay-css">
 </head>
 
 <body>
-	<img src="" alt="Matchoverlay Background" style="width:500;height:250;" id="matchoverlay-background">
+	<script>
+		document.getElementById('matchoverlay-css').href = `${window.location.origin}/matchoverlay-css`;
+	</script>
+	<img id="matchoverlay-background" class="background" src="" alt="Matchoverlay Background"
+		style="width:500px;height:250px;">
+	<p id="url" style="left:0px; top:220px; width:500px; font-size: 0.8rem;"></p>
 
 	<script>
 		document.getElementById('matchoverlay-background').src = `${window.location.origin}/osu-background`;
 		document.getElementById('matchoverlay-background').style.width = '500px';
 		document.getElementById('matchoverlay-background').style.height = '250px';
+
+		document.getElementById('url').innerText = `${window.location.origin}/matchoverlay`;
 
 		async function getCurrentMatchId() {
 			// Fetch the current bingo board
@@ -21,21 +29,6 @@
 					currentMatchId = data.matchId;
 				});
 		}
-
-		// async function getCurrentMatch() {
-		// 	// Fetch the current bingo board
-		// 	fetch(`${window.location.origin}/currentbingo?u=${playerId}`)
-		// 		.then(response => response.json())
-		// 		.then(data => {
-		// 			currentBingo = data;
-
-		// 			document.getElementById('matchoverlay').src = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
-
-		// 			// Scale the image to 500x250
-		// 			document.getElementById('matchoverlay').style.width = '500px';
-		// 			document.getElementById('matchoverlay').style.height = '250px';
-		// 		});
-		// }
 
 		// Get the player id from the URL
 		const urlParams = new URLSearchParams(window.location.search);
