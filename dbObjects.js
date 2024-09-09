@@ -19,7 +19,7 @@ const gamifyProcessQueue = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
 	logging: false,
-	storage: `${process.env.ELITEBOTIXROOTPATH}/databases/processQueue.sqlite`,
+	storage: `${process.env.GAMIFYROOTPATH}/databases/processQueue.sqlite`,
 	retry: {
 		max: 25, // Maximum retry 15 times
 		backoffBase: 100, // Initial backoff duration in ms. Default: 100,
@@ -34,7 +34,7 @@ const gamifyMainData = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
 	logging: false,
-	storage: `${process.env.ELITEBOTIXROOTPATH}/databases/mainData.sqlite`,
+	storage: `${process.env.GAMIFYROOTPATH}/databases/mainData.sqlite`,
 	retry: {
 		max: 25, // Maximum retry 15 times
 		backoffBase: 100, // Initial backoff duration in ms. Default: 100,
