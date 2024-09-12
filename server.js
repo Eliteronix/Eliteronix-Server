@@ -21,7 +21,12 @@ const browserSourceServer = http.createServer(async (req, res) => {
 			res.end('Internal server error');
 		});
 	} catch (error) {
-		console.error(error, route);
+		if (error.code === 'MODULE_NOT_FOUND') {
+			//console.error('Route not found:', route);
+		} else {
+			console.error(route, error);
+		}
+
 		// If the route does not exist, return a 404
 		res.statusCode = 404;
 		res.setHeader('Content-Type', 'text/plain');
