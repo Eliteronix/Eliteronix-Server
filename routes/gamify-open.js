@@ -41,7 +41,8 @@ module.exports = {
 			date: new Date()
 		});
 
-		res.setHeader('Content-Type', 'text/plain');
-		res.end('updated task status');
+		// Send back an html page that closes the window
+		res.setHeader('Content-Type', 'text/html');
+		res.end('<html><head><script>window.close();</script></head><body></body></html>');
 	}
 };
