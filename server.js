@@ -10,16 +10,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 	let args = route.substring(1).split('/');
 
 	try {
-		const fs = require('fs');
-
-		// Check what files are in the routes folder
-		console.log(fs.readdirSync('./routes'));
-
-		console.log(args);
-
 		let endpoint = require(`./routes/${args.shift()}.js`);
-
-		console.log(endpoint);
 
 		endpoint.execute(req, res, args).catch((e) => {
 			console.error(e);
@@ -31,7 +22,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		});
 	} catch (error) {
 		if (error.code === 'MODULE_NOT_FOUND') {
-			console.error('Route not found:', route, error);
+			// console.error('Route not found:', route);
 		} else {
 			console.error(route, error);
 		}
