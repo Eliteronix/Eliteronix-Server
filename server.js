@@ -31,7 +31,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		});
 	} catch (error) {
 		if (error.code === 'MODULE_NOT_FOUND') {
-			// console.error('Route not found:', route);
+			console.error('Route not found:', route, error);
 		} else {
 			console.error(route, error);
 		}
