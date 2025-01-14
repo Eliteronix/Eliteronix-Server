@@ -15,6 +15,8 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		// Check what files are in the routes folder
 		console.log(fs.readdirSync('./routes'));
 
+		console.log(args);
+
 		let endpoint = require(`./routes/${args.shift()}.js`);
 
 		endpoint.execute(req, res, args).catch((e) => {
