@@ -22,7 +22,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		});
 	} catch (error) {
 		if (error.code === 'MODULE_NOT_FOUND') {
-			//console.error('Route not found:', route);
+			// console.error('Route not found:', route);
 		} else {
 			console.error(route, error);
 		}
@@ -30,7 +30,7 @@ const browserSourceServer = http.createServer(async (req, res) => {
 		// If the route does not exist, return a 404
 		res.statusCode = 404;
 		res.setHeader('Content-Type', 'text/plain');
-		res.end('Not found');
+		res.end(`Not found | ${route}`);
 	}
 });
 
