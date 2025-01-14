@@ -19,6 +19,8 @@ const browserSourceServer = http.createServer(async (req, res) => {
 
 		let endpoint = require(`./routes/${args.shift()}.js`);
 
+		console.log(endpoint);
+
 		endpoint.execute(req, res, args).catch((e) => {
 			console.error(e);
 
