@@ -13,7 +13,7 @@ module.exports = {
 		}
 
 		// Send back an HTML file
-		res.setHeader('Content-Type', 'text/html');
+		res.setHeader('Content-Type', 'text/html; charset=utf-8');
 		res.end(fs.readFileSync('./webpages/matchoverlay.html'));
 	}
 };

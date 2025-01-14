@@ -12,6 +12,13 @@
 	</script>
 	<img id="matchoverlay-background" class="background" src="" alt="Matchoverlay Background"
 		style="width:500px;height:250px;">
+
+	<img id="matchoverlay-currentmap" class="map" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+		alt="Matchoverlay Current Map" style="width:500px;height:139px;">
+	<p id="title" style="left:0px; top:0px; width:500px; font-size: 1rem;"></p>
+	<!-- <p id="score" style="left:0px; top:20px; width:500px; font-size: 1rem;"></p> -->
+	<p id="redScore" style="left:0px; top:15px; width:245px; font-size: 2rem; color:#BB1177; text-align: right"></p>
+	<p id="blueScore" style="left:255px; top:15px; width:245px; font-size: 2rem; color:#2299BB; text-align: left"></p>
 	<p id="url" style="left:0px; top:220px; width:500px; font-size: 0.8rem;"></p>
 
 	<script>
@@ -19,15 +26,45 @@
 		document.getElementById('matchoverlay-background').style.width = '500px';
 		document.getElementById('matchoverlay-background').style.height = '250px';
 
-		document.getElementById('url').innerText = `${window.location.origin}/matchoverlay`;
+		document.getElementById('title').innerText = 'Loading Overlay...';
 
-		async function getCurrentMatchId() {
-			// Fetch the current bingo board
-			fetch(`${window.location.origin}/currentmatch?u=${playerId}`)
+		async function getCurrentMatch() {
+			// Fetch the current match
+			await fetch(`${window.location.origin}/currentmatch?u=${playerId}`)
 				.then(response => response.json())
-				.then(data => {
+				.then(async (data) => {
 					currentMatchId = data.matchId;
+
+					document.getElementById('url').innerText = `https://osu.ppy.sh/mp/${currentMatchId}`;
+
+					// Get the current match data
+					await fetch(`${window.location.origin}/currentmatchdata?m=${currentMatchId}`)
+						.then(response => response.json())
+						.then(async (data) => {
+							currentMatchData = data;
+
+							document.getElementById('title').innerText = currentMatchData.title;
+							// document.getElementById('score').innerText = `${currentMatchData.redScore} - ${currentMatchData.blueScore}`;
+
+							let redScore = '';
+							let blueScore = '';
+
+							for (let i = 0; i < currentMatchData.redScore; i++) {
+								redScore += '◆';
+							}
+
+							for (let i = 0; i < currentMatchData.blueScore; i++) {
+								blueScore += '◆';
+							}
+
+							document.getElementById('redScore').innerText = redScore;
+							document.getElementById('blueScore').innerText = blueScore;
+
+							document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.lastMapsetId}/covers/cover.jpg`;
+						});
 				});
+
+			console.log(currentMatchData);
 		}
 
 		// Get the player id from the URL
@@ -35,12 +72,14 @@
 		const playerId = urlParams.get('u');
 
 		let currentMatchId = null;
+		let currentMatchData = null;
 
-		getCurrentMatchId();
-
-		setInterval(() => {
-			getCurrentMatchId();
-		}, 60000);
+		getCurrentMatch()
+			.then(() => {
+				setInterval(async () => {
+					await getCurrentMatch();
+				}, 60000);
+			});
 	</script>
 </body>
 
