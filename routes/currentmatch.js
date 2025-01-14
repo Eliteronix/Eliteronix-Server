@@ -14,7 +14,8 @@ module.exports = {
 		let lastMatchScore = await DBOsuMultiGameScores.findOne({
 			attributes: ['matchId', 'osuUserId'],
 			where: {
-				osuUserId: playerId
+				osuUserId: playerId,
+				tourneyMatch: true
 			},
 			order: [['gameId', 'DESC']]
 		});
