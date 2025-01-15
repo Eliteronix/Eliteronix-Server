@@ -105,7 +105,7 @@ module.exports = {
 						for (let i = 0; i < json.events.length; i++) {
 							if (json.events[i].detail.type === 'other') {
 								//Get the last map id
-								if (json.events[i].game.beatmap_id) {
+								if (json.events[i].game.beatmap_id && json.events[i].game.end_time !== null) {
 									lastMapsetId = json.events[i].game.beatmap.beatmapset.id;
 								}
 
