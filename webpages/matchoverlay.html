@@ -55,8 +55,16 @@
 								redScore += '◆';
 							}
 
+							if (currentMatchData.redScore === 0) {
+								redScore = '◇';
+							}
+
 							for (let i = 0; i < currentMatchData.blueScore; i++) {
 								blueScore += '◆';
+							}
+
+							if (currentMatchData.blueScore === 0) {
+								blueScore = '◇';
 							}
 
 							document.getElementById('redScore').innerText = redScore;
