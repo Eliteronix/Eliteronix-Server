@@ -51,20 +51,22 @@
 							let redScore = '';
 							let blueScore = '';
 
+							let minimumScore = Math.max(currentMatchData.redScore, currentMatchData.blueScore, 7);
+
 							for (let i = 0; i < currentMatchData.redScore; i++) {
 								redScore += '◆';
 							}
 
-							if (currentMatchData.redScore === 0) {
-								redScore = '◇';
+							while (redScore.length < minimumScore) {
+								redScore = '◇' + redScore;
 							}
 
 							for (let i = 0; i < currentMatchData.blueScore; i++) {
 								blueScore += '◆';
 							}
 
-							if (currentMatchData.blueScore === 0) {
-								blueScore = '◇';
+							while (blueScore.length < minimumScore) {
+								blueScore = blueScore + '◇';
 							}
 
 							document.getElementById('redScore').innerText = redScore;
