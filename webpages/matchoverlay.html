@@ -64,7 +64,11 @@
 
 							if (currentMatchData.playerUpdates.length === 0) {
 								document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.lastMapsetId}/covers/cover.jpg`;
+
+								document.getElementById('playerUpdates').innerText = '';
 							} else {
+								document.getElementById('matchoverlay-currentmap').src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
 								document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
 							}
 
