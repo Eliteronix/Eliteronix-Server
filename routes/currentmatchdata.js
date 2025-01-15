@@ -246,7 +246,7 @@ module.exports = {
 								playerUpdates.push(`${playerName} has been kicked`);
 								currentPlayers = currentPlayers.filter(player => player !== playerName);
 							} else if (json.events[i].detail.type === 'match-disbanded') {
-								playerUpdates.push('The match has been closed.');
+								playerUpdates.push('The match is over');
 								finished = true;
 							} else if (json.events[i].detail.type === 'match-created') {
 								playerUpdates.push('The match has been created.');
