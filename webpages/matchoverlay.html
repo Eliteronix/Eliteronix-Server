@@ -72,7 +72,7 @@
 							document.getElementById('redScore').innerText = redScore;
 							document.getElementById('blueScore').innerText = blueScore;
 
-							if (currentMatchData.playerUpdates.length === 0) {
+							if (currentMatchData.currentMapsetId) {
 								document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.currentMapsetId}/covers/cover.jpg`;
 
 								document.getElementById('playerUpdates').innerText = '';
