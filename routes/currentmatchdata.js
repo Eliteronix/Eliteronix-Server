@@ -66,6 +66,8 @@ module.exports = {
 						latestEventId = json.latest_event_id - 1;
 					}
 
+					console.log(json);
+
 					while (json.first_event_id !== json.events[0].id) {
 						let earlierEvents = await fetch(`https://osu.ppy.sh/community/matches/${match.id}?before=${json.events[0].id}&limit=100`)
 							.then(async (res) => {
@@ -135,7 +137,7 @@ module.exports = {
 									}
 								} else if (json.events[i].game.scores.length === 2) {
 									//Head to head
-									let playerNames = match.name.split(/\) ?vs.? ?\(/gm);
+									let playerNames = json.match.name.split(/\) ?vs.? ?\(/gm);
 									//basically a check if its a tourney match (basically)
 									if (playerNames[1]) {
 										let redPlayer = playerNames[0].replace(/.+\(/gm, '');
