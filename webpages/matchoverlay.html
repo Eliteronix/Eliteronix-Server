@@ -13,20 +13,22 @@
 	<img id="matchoverlay-background" class="background" src="" alt="Matchoverlay Background"
 		style="width:500px;height:250px;">
 
-	<img id="matchoverlay-currentmap" class="map" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-		alt="Matchoverlay Current Map" style="width:500px;height:139px;">
-	<p id="title" style="left:0px; top:0px; width:500px; font-size: 1rem;"></p>
-	<!-- <p id="score" style="left:0px; top:20px; width:500px; font-size: 1rem;"></p> -->
+	<p id="title" style="left:0px; top:0px; width:500px; font-size: 1rem;">Loading Overlay...</p>
+
 	<p id="redScore" style="left:0px; top:15px; width:245px; font-size: 2rem; color:#BB1177; text-align: right"></p>
 	<p id="blueScore" style="left:255px; top:15px; width:245px; font-size: 2rem; color:#2299BB; text-align: left"></p>
+
+	<img id="matchoverlay-currentmap" class="map" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+		alt="Matchoverlay Current Map" style="width:500px;height:139px;">
+
+	<p id="playerUpdates" style="left:0px; top:85px; width:500px; height:139px; font-size: 1rem"></p>
+
 	<p id="url" style="left:0px; top:220px; width:500px; font-size: 0.8rem;"></p>
 
 	<script>
 		document.getElementById('matchoverlay-background').src = `${window.location.origin}/osu-background`;
 		document.getElementById('matchoverlay-background').style.width = '500px';
 		document.getElementById('matchoverlay-background').style.height = '250px';
-
-		document.getElementById('title').innerText = 'Loading Overlay...';
 
 		async function getCurrentMatch() {
 			// Fetch the current match
@@ -60,11 +62,14 @@
 							document.getElementById('redScore').innerText = redScore;
 							document.getElementById('blueScore').innerText = blueScore;
 
-							document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.lastMapsetId}/covers/cover.jpg`;
+							if (currentMatchData.playerUpdates.length === 0) {
+								document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.lastMapsetId}/covers/cover.jpg`;
+							} else {
+								document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
+							}
+
 						});
 				});
-
-			console.log(currentMatchData);
 		}
 
 		// Get the player id from the URL

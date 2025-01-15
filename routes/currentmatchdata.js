@@ -66,8 +66,6 @@ module.exports = {
 						latestEventId = json.latest_event_id - 1;
 					}
 
-					console.log(json);
-
 					while (json.first_event_id !== json.events[0].id) {
 						let earlierEvents = await fetch(`https://osu.ppy.sh/community/matches/${match.id}?before=${json.events[0].id}&limit=100`)
 							.then(async (res) => {
@@ -100,6 +98,9 @@ module.exports = {
 						let redScore = 0; //Score on the left side / first slots
 						let blueScore = 0; //Score on the right side / last slots
 						let lastMapsetId = null;
+						let lastMapWinner = null;
+						let redTeam = [];
+						let blueTeam = [];
 
 						for (let i = 0; i < json.events.length; i++) {
 							if (json.events[i].detail.type === 'other') {
@@ -114,6 +115,34 @@ module.exports = {
 								//Get the scores of the teams
 								let blueScores = json.events[i].game.scores.filter(score => score.match.team === 'blue');
 								let redScores = json.events[i].game.scores.filter(score => score.match.team === 'red');
+
+								for (let j = 0; j < blueScores.length; j++) {
+									let playerName = await getOsuPlayerName(blueScores[j].user_id);
+
+									if (blueTeam.indexOf(playerName) === -1) {
+										blueTeam.push(playerName);
+									}
+
+									let wrongPlayerIndex = redTeam.indexOf(playerName);
+
+									if (wrongPlayerIndex !== -1) {
+										redTeam.splice(wrongPlayerIndex, 1);
+									}
+								}
+
+								for (let j = 0; j < redScores.length; j++) {
+									let playerName = await getOsuPlayerName(redScores[j].user_id);
+
+									if (redTeam.indexOf(playerName) === -1) {
+										redTeam.push(playerName);
+									}
+
+									let wrongPlayerIndex = blueTeam.indexOf(playerName);
+
+									if (wrongPlayerIndex !== -1) {
+										blueTeam.splice(wrongPlayerIndex, 1);
+									}
+								}
 
 								if (blueScores.length || redScores.length) {
 									//Team vs
@@ -132,8 +161,12 @@ module.exports = {
 
 									if (blueTotalScore > redTotalScore) {
 										blueScore++;
+
+										lastMapWinner = 'blue';
 									} else if (blueTotalScore < redTotalScore) {
 										redScore++;
+
+										lastMapWinner = 'red';
 									}
 								} else if (json.events[i].game.scores.length === 2) {
 									//Head to head
@@ -142,6 +175,26 @@ module.exports = {
 									if (playerNames[1]) {
 										let redPlayer = playerNames[0].replace(/.+\(/gm, '');
 										let bluePlayer = playerNames[1].replace(')', '');
+
+										if (redTeam.indexOf(redPlayer) === -1) {
+											redTeam.push(redPlayer);
+										}
+
+										if (blueTeam.indexOf(bluePlayer) === -1) {
+											blueTeam.push(bluePlayer);
+										}
+
+										let wrongPlayerIndex = redTeam.indexOf(bluePlayer);
+
+										if (wrongPlayerIndex !== -1) {
+											redTeam.splice(wrongPlayerIndex, 1);
+										}
+
+										wrongPlayerIndex = blueTeam.indexOf(redPlayer);
+
+										if (wrongPlayerIndex !== -1) {
+											blueTeam.splice(wrongPlayerIndex, 1);
+										}
 
 										let redTotal = null;
 										let blueTotal = null;
@@ -159,40 +212,62 @@ module.exports = {
 
 										if (blueTotal > redTotal) {
 											blueScore++;
+
+											lastMapWinner = 'blue';
 										} else if (blueTotal < redTotal) {
 											redScore++;
+
+											lastMapWinner = 'red';
 										}
 									}
 								}
 							} else if (json.events[i].detail.type === 'host-changed' && json.events[i].user_id) {
 								let playerName = await getOsuPlayerName(json.events[i].user_id);
-								playerUpdates.push(`<:exchangealtsolid:1005141205069344859> \`${playerName}\` became the host.`);
+								playerUpdates.push(`${playerName} became the host.`);
 							} else if (json.events[i].detail.type === 'host-changed') {
-								playerUpdates.push('<:exchangealtsolid:1005141205069344859> The host has been reset.');
+								playerUpdates.push('The host has been reset.');
 
 								if (json.events[i].user_id === 0) {
 									redScore = 0;
 									blueScore = 0;
+
+									lastMapWinner = null;
 								}
 							} else if (json.events[i].detail.type === 'player-joined') {
 								let playerName = await getOsuPlayerName(json.events[i].user_id);
-								playerUpdates.push(`<:arrowrightsolid:1005141207879536761> \`${playerName}\` joined the match.`);
+								playerUpdates.push(`${playerName} joined`);
 								currentPlayers.push(playerName);
 							} else if (json.events[i].detail.type === 'player-left') {
 								let playerName = await getOsuPlayerName(json.events[i].user_id);
-								playerUpdates.push(`<:arrowleftsolid:1005141359008682024> \`${playerName}\` left the match.`);
+								playerUpdates.push(`${playerName} left`);
 								currentPlayers = currentPlayers.filter(player => player !== playerName);
 							} else if (json.events[i].detail.type === 'player-kicked') {
 								let playerName = await getOsuPlayerName(json.events[i].user_id);
-								playerUpdates.push(`<:bansolid:1032747189941829683> \`${playerName}\` has been kicked from the match.`);
+								playerUpdates.push(`${playerName} has been kicked`);
 								currentPlayers = currentPlayers.filter(player => player !== playerName);
 							} else if (json.events[i].detail.type === 'match-disbanded') {
-								playerUpdates.push('<:timessolid:1005141203819434104> The match has been closed.');
+								playerUpdates.push('The match has been closed.');
 								finished = true;
 							} else if (json.events[i].detail.type === 'match-created') {
-								playerUpdates.push('<:plussolid:1005142572823494677> The match has been created.');
+								playerUpdates.push('The match has been created.');
 							} else {
 								playerUpdates.push(`${json.events[i].detail.type}, ${json.events[i].user_id}`);
+							}
+						}
+
+						for (let i = 0; i < playerUpdates.length; i++) {
+							for (let j = 0; j < redTeam.length; j++) {
+								if (playerUpdates[i].includes(redTeam[j])) {
+									playerUpdates[i] = playerUpdates[i].replace(redTeam[j], `<b><span style="color:#BB1177;">${redTeam[j]}</span></b>`);
+									break;
+								}
+							}
+
+							for (let j = 0; j < blueTeam.length; j++) {
+								if (playerUpdates[i].includes(blueTeam[j])) {
+									playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:#2299BB;">${blueTeam[j]}</span></b>`);
+									break;
+								}
 							}
 						}
 
@@ -203,7 +278,10 @@ module.exports = {
 							"playerUpdates": playerUpdates,
 							"currentPlayers": currentPlayers,
 							"finished": json.match.end_time,
-							"lastMapsetId": lastMapsetId
+							"lastMapsetId": lastMapsetId,
+							"lastMapWinner": lastMapWinner,
+							"redTeam": redTeam,
+							"blueTeam": blueTeam
 						};
 					}
 				}
