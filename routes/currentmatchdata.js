@@ -251,8 +251,18 @@ module.exports = {
 								playerUpdates.push(`${playerName} has been kicked`);
 								currentPlayers = currentPlayers.filter(player => player !== playerName);
 							} else if (json.events[i].detail.type === 'match-disbanded') {
-								playerUpdates.push('The match is over');
-								finished = true;
+								playerUpdates.push('');
+
+								let teamNames = json.match.name.split(/\) ?vs.? ?\(/gm);
+
+								if (teamNames[1] && redScore > blueScore) {
+
+									playerUpdates.push(`<b><span style="color:#BB1177;">${teamNames[0].replace(/.+\(/gm, '')}</span></b> won the match.`);
+								} else if (teamNames[1] && redScore < blueScore) {
+									playerUpdates.push(`<b><span style="color:#BB1177;">${teamNames[1].replace(')', '')}</span></b> won the match.`);
+								} else {
+									playerUpdates.push('The match is over');
+								}
 							} else if (json.events[i].detail.type === 'match-created') {
 								playerUpdates.push('The match has been created.');
 							} else {
@@ -270,7 +280,7 @@ module.exports = {
 
 							for (let j = 0; j < blueTeam.length; j++) {
 								if (playerUpdates[i].includes(blueTeam[j])) {
-									playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:#2299BB;">${blueTeam[j]}</span></b>`);
+									playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:#BB1177;">${redTeam[j]}</span></b>`);
 									break;
 								}
 							}

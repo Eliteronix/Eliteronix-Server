@@ -85,6 +85,10 @@
 							} else {
 								document.getElementById('matchoverlay-currentmap').src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
+								while (currentMatchData.playerUpdates.length > 7) {
+									currentMatchData.playerUpdates.shift();
+								}
+
 								document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
 							}
 
