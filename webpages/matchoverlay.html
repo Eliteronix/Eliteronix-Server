@@ -8,6 +8,17 @@
 
 <body>
 	<script>
+		const styleSheet = `
+  @font-face {
+    font-family: 'comfortaa';
+    src: url('${window.location.origin}/comfortaa-regular);
+  }
+`;
+
+		const styleTag = document.createElement("style");
+		styleTag.innerHTML = styleSheet;
+		document.head.appendChild(styleTag);
+
 		document.getElementById('matchoverlay-css').href = `${window.location.origin}/matchoverlay-css`;
 	</script>
 	<img id="matchoverlay-background" class="background" src="" alt="Matchoverlay Background"
