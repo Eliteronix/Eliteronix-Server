@@ -1,8 +1,6 @@
 @font-face {
 	font-family: 'comfortaa';
-	/* this value can be anything you wish - it gets used in the class definition below */
 	src: url('http://eliteronix.de/comfortaa-regular');
-	/* add the file path to your font here */
 }
 
 body {
