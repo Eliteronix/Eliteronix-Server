@@ -51,13 +51,19 @@
 							let redScore = '';
 							let blueScore = '';
 
-							let minimumScore = Math.max(currentMatchData.redScore, currentMatchData.blueScore, 4);
+							let extraRound = 0;
+
+							if (currentMatchData.redScore === currentMatchData.blueScore || currentMatchData.currentMapsetId) {
+								extraRound = 1;
+							}
+
+							let maximumScore = Math.max(currentMatchData.redScore + extraRound, currentMatchData.blueScore + extraRound, 4);
 
 							for (let i = 0; i < currentMatchData.redScore; i++) {
 								redScore += '◆';
 							}
 
-							while (redScore.length < minimumScore) {
+							while (redScore.length < maximumScore) {
 								redScore = '◇' + redScore;
 							}
 
@@ -65,7 +71,7 @@
 								blueScore += '◆';
 							}
 
-							while (blueScore.length < minimumScore) {
+							while (blueScore.length < maximumScore) {
 								blueScore = blueScore + '◇';
 							}
 
