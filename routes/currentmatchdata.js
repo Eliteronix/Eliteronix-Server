@@ -259,7 +259,7 @@ module.exports = {
 
 									playerUpdates.push(`<b><span style="color:#BB1177;">${teamNames[0].replace(/.+\(/gm, '')}</span></b> won the match.`);
 								} else if (teamNames[1] && redScore < blueScore) {
-									playerUpdates.push(`<b><span style="color:#BB1177;">${teamNames[1].replace(')', '')}</span></b> won the match.`);
+									playerUpdates.push(`<b><span style="color:#2299BB;">${teamNames[1].replace(')', '')}</span></b> won the match.`);
 								} else {
 									playerUpdates.push('The match is over');
 								}
@@ -280,7 +280,7 @@ module.exports = {
 
 							for (let j = 0; j < blueTeam.length; j++) {
 								if (playerUpdates[i].includes(blueTeam[j])) {
-									playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:#BB1177;">${blueTeam[j]}</span></b>`);
+									playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:#2299BB;">${blueTeam[j]}</span></b>`);
 									break;
 								}
 							}
