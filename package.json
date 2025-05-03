@@ -23,5 +23,8 @@
     "node-osu": "^2.2.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "eslint": "^9.26.0"
   }
 }
