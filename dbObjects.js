@@ -48,10 +48,14 @@ const gamifyMainData = new Sequelize('database', 'username', 'password', {
 const DBOsuMultiGameScores = require(`${process.env.ELITEBOTIXROOTPATH}/models/DBOsuMultiGameScores`)(multiGameScores, Sequelize.DataTypes);
 
 const DBGamifyProcessQueue = require(`${process.env.GAMIFYROOTPATH}/models/DBProcessQueue`)(gamifyProcessQueue, Sequelize.DataTypes);
+const DBGamifyCategories = require(`${process.env.GAMIFYROOTPATH}/models/DBCategories`)(gamifyMainData, Sequelize.DataTypes);
+const DBGamifyTaskCategories = require(`${process.env.GAMIFYROOTPATH}/models/DBTaskCategories`)(gamifyMainData, Sequelize.DataTypes);
 const DBGamifyTasks = require(`${process.env.GAMIFYROOTPATH}/models/DBTasks`)(gamifyMainData, Sequelize.DataTypes);
 
 module.exports = {
 	DBOsuMultiGameScores,
 	DBGamifyProcessQueue,
+	DBGamifyCategories,
+	DBGamifyTaskCategories,
 	DBGamifyTasks,
 };
