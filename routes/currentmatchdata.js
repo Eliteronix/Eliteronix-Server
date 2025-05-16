@@ -257,17 +257,17 @@ module.exports = {
 				}
 
 				responseJson = {
-					"title": json.match.name,
-					"redScore": redScore,
-					"blueScore": blueScore,
-					"playerUpdates": playerUpdates,
-					"currentPlayers": currentPlayers,
-					"finished": json.match.end_time,
-					"currentMapsetId": currentMapsetId,
-					"currentMapMods": currentMapMods,
-					"lastMapWinner": lastMapWinner,
-					"redTeam": redTeam,
-					"blueTeam": blueTeam
+					'title': json.match.name,
+					'redScore': redScore,
+					'blueScore': blueScore,
+					'playerUpdates': playerUpdates,
+					'currentPlayers': currentPlayers,
+					'finished': json.match.end_time,
+					'currentMapsetId': currentMapsetId,
+					'currentMapMods': currentMapMods,
+					'lastMapWinner': lastMapWinner,
+					'redTeam': redTeam,
+					'blueTeam': blueTeam
 				};
 			}
 		});
