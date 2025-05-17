@@ -3,10 +3,33 @@
 
 <head>
 	<title>Gamify</title>
+	<link rel="stylesheet" type="text/css" id="gamify-css">
 </head>
 
 <body>
+	<div class="background"></div>
+	<div class="particles" id="particles"></div>
 
+	<script>
+		document.getElementById('gamify-css').href = `${window.location.origin}/gamify-css`;
+	</script>
+	<script>
+		const container = document.getElementById('particles');
+
+		for (let i = 0; i < 50; i++) {
+			const particle = document.createElement('div');
+			particle.className = 'particle';
+
+			const size = Math.random() * 8 + 6;
+			particle.style.width = `${size}px`;
+			particle.style.height = `${size}px`;
+			particle.style.left = `${Math.random() * 100}vw`;
+			particle.style.top = `${Math.random() * 100}vh`;
+			particle.style.animationDuration = `${10 + Math.random() * 20}s`;
+
+			container.appendChild(particle);
+		}
+	</script>
 </body>
 
 </html>

@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = {
 	async execute(req, res) {
 		const urlParams = new URLSearchParams(req.url.split('?')[1]);
@@ -11,6 +13,6 @@ module.exports = {
 
 		// Send back an html page
 		res.setHeader('Content-Type', 'text/html');
-		res.end('./webpages/gamify.html');
+		res.end(fs.readFileSync('./webpages/gamify.html'));
 	}
 };

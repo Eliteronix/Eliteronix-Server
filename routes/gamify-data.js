@@ -27,6 +27,13 @@ module.exports = {
 			return;
 		}
 
+		categories = categories.map(c => {
+			return {
+				id: c.id,
+				name: c.name
+			};
+		});
+
 		let tasks = await DBGamifyTasks.findAll({
 			attributes: [
 				'id',
@@ -109,6 +116,7 @@ module.exports = {
 			}
 
 			categories[i].tasks = tasksInCategory;
+
 			categories[i].percentageDone = percentageDone;
 		}
 

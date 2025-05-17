@@ -1,0 +1,52 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+}
+
+/* Grid background */
+.background {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #101010;
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+	background-size: 40px 40px;
+	z-index: 0;
+}
+
+/* Particle container */
+.particles {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.particle {
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(55, 167, 219, 0.5);
+	animation: float 20s linear infinite;
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(100vh) scale(0.5);
+		opacity: 0.4;
+	}
+
+	100% {
+		transform: translateY(-100vh) scale(1);
+		opacity: 0;
+	}
+}

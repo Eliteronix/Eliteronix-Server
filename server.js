@@ -34,6 +34,9 @@ const browserSourceServer = http.createServer(async (req, res) => {
 	}
 });
 
+// eslint-disable-next-line no-console
+console.log('Server running on port 80');
+
 // Start the HTTP server which exposes the browsersources on http://localhost:80/duelRating/1234
 browserSourceServer.listen(80);
 
