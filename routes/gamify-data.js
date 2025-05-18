@@ -52,7 +52,10 @@ module.exports = {
 			],
 			where: {
 				guildId: guildId
-			}
+			},
+			order: [
+				['done', 'ASC']
+			]
 		});
 
 		if (tasks.length === 0) {

@@ -37,6 +37,8 @@ body {
 
 .category {
 	/* border: 1px solid #ccc; */
+	display: flex;
+	flex-direction: column;
 	flex: 1 1 500px;
 	/* Flex-grow, flex-shrink, and base width */
 	line-height: 1.5;
