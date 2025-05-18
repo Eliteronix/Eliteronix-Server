@@ -24,18 +24,48 @@ body {
 	z-index: 0;
 }
 
+.category-container {
+	display: flex;
+	flex-wrap: wrap;
+	/* Allow wrapping to next line */
+	gap: 20px;
+	/* Optional: spacing between items */
+	justify-content: center;
+	/* Optional: center them */
+	padding: 20px;
+}
+
 .category {
 	/* border: 1px solid #ccc; */
+	flex: 1 1 500px;
+	/* Flex-grow, flex-shrink, and base width */
 	line-height: 1.5;
 	text-align: center;
 	letter-spacing: 1px;
 	text-transform: uppercase;
-	font-family: 'Arial', sans-serif;
 	position: relative;
 	z-index: 2;
 	color: white;
 	padding: 20px;
 	font-size: 20px;
+	max-width: 800px;
+}
+
+.task {
+	text-align: left;
+	text-transform: lowercase;
+	padding: 10px;
+	font-size: 16px;
+}
+
+.done {
+	text-decoration: line-through;
+	color: #ccc;
+}
+
+.task:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transition: background 0.3s ease;
 }
 
 /* Particle container */

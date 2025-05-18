@@ -22,6 +22,7 @@
 
 	<div class="background"></div>
 	<div class="particles" id="particles"></div>
+	<div class="category-container" id="categories"></div>
 
 	<script>
 		document.getElementById('gamify-css').href = `${window.location.origin}/gamify-css`;
@@ -47,7 +48,7 @@
 		// Get the data from the gamify-data endpoint
 		const params = new URLSearchParams(window.location.search);
 		const gParam = params.get('g') || '';
-		fetch(`${window.location.origin}/gamify-data?g=${gParam}`)
+		data = fetch(`${window.location.origin}/gamify-data?g=${gParam}`)
 			.then(response => response.json())
 			.then(data => {
 				// Create a new div for each category in the data array
@@ -55,10 +56,32 @@
 					const categoryDiv = document.createElement('div');
 					categoryDiv.className = 'category';
 					categoryDiv.innerHTML = `
-				<p>${category.name}</p>
+				<h3>${category.name} - ${category.percentageDone}</h3>
 			`;
 
-					document.body.appendChild(categoryDiv);
+					console.log(category);
+
+					// Create a new div for each task in the category
+					category.tasks.forEach(task => {
+						const taskDiv = document.createElement('div');
+						taskDiv.className = 'task';
+
+						if (task.done) {
+							taskDiv.classList.add('done');
+						}
+
+						taskDiv.innerHTML = `
+					<p>${task.name}</p>
+					`;
+
+						console.log(task);
+
+						categoryDiv.appendChild(taskDiv);
+					});
+
+					// Append the category div to the container
+					const categoriesContainer = document.getElementById('categories');
+					categoriesContainer.appendChild(categoryDiv);
 				});
 
 				return data;
