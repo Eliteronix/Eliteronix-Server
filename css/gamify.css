@@ -51,6 +51,38 @@ body {
 	padding: 20px;
 }
 
+.category-header {
+	position: relative;
+	padding-left: 20px;
+	/* space for the arrow */
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.category-header:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transition: background 0.3s ease;
+}
+
+.category-header::before {
+	content: ">";
+	/* right-pointing arrow */
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition: transform 0.3s ease;
+}
+
+.category-header.expanded::before {
+	transform: rotate(90deg);
+	/* Rotate the arrow */
+}
+
 .category {
 	/* border: 1px solid #ccc; */
 	display: flex;
@@ -67,6 +99,7 @@ body {
 	padding: 20px;
 	font-size: 20px;
 	max-width: 800px;
+	background: rgba(255, 255, 255, 0.025);
 }
 
 .task {
@@ -74,11 +107,16 @@ body {
 	text-transform: lowercase;
 	padding: 10px;
 	font-size: 16px;
+	cursor: pointer;
 }
 
 .done {
 	text-decoration: line-through;
 	color: #ccc;
+}
+
+.hidden {
+	display: none;
 }
 
 .task:hover {

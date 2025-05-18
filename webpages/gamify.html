@@ -57,11 +57,29 @@
 				data.forEach(category => {
 					const categoryDiv = document.createElement('div');
 					categoryDiv.className = 'category';
-					categoryDiv.innerHTML = `
+
+					const categoryDivHeader = document.createElement('div');
+					categoryDivHeader.className = 'category-header';
+					categoryDivHeader.classList.add('expanded');
+
+					categoryDiv.style.order = category.percentageDone.replace('%', '').replace('None', '100');
+
+					categoryDivHeader.innerHTML = `
 				<h3>${category.name} - ${category.percentageDone}</h3>
 			`;
 
-					console.log(category);
+					categoryDiv.appendChild(categoryDivHeader);
+
+					// Add a click event to collapse/expand the category
+					categoryDivHeader.addEventListener('click', () => {
+						categoryDivHeader.classList.toggle('collapsed');
+						categoryDivHeader.classList.toggle('expanded');
+
+						const tasks = categoryDiv.querySelectorAll('.task');
+						tasks.forEach(task => {
+							task.classList.toggle('hidden');
+						});
+					});
 
 					// Create a new div for each task in the category
 					category.tasks.forEach(task => {
@@ -91,6 +109,25 @@
 								category.tasks[taskIndex].done = task.done;
 							}
 
+							// Update the category's percentage done
+							let totalTaskWeight = 0;
+							let doneTaskWeight = 0;
+
+							for (let i = 0; i < category.tasks.length; i++) {
+								let task = category.tasks[i];
+
+								totalTaskWeight += task.weight;
+								if (task.done) {
+									doneTaskWeight += task.weight;
+								}
+							}
+
+							category.percentageDone = `${Math.round((doneTaskWeight / totalTaskWeight) * 100)}%`;
+
+							categoryDivHeader.innerHTML = `
+						<h3>${category.name} - ${category.percentageDone}</h3>
+					`;
+
 							// Send the updated data to the server
 							if (task.done) {
 								fetch(`${window.location.origin}/gamify-done?g=${gParam}&t=${task.name}`);
@@ -98,9 +135,6 @@
 								fetch(`${window.location.origin}/gamify-open?g=${gParam}&t=${task.name}`);
 							}
 						});
-
-
-						console.log(task);
 
 						categoryDiv.appendChild(taskDiv);
 					});

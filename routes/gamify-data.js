@@ -64,6 +64,24 @@ module.exports = {
 			return;
 		}
 
+		tasks = tasks.map(t => {
+			return {
+				id: t.id,
+				name: t.name,
+				type: t.type,
+				amount: t.amount,
+				reductionPerHour: t.reductionPerHour,
+				done: t.done,
+				dateLastDone: t.dateLastDone,
+				dateReopen: t.dateReopen,
+				resetEveryHours: t.resetEveryHours,
+				resetEveryDays: t.resetEveryDays,
+				dateOfLastReminder: t.dateOfLastReminder,
+				remindEveryHours: t.remindEveryHours,
+				peopleToRemind: t.peopleToRemind
+			};
+		});
+
 		let taskCategoryConnections = await DBGamifyTaskCategories.findAll({
 			attributes: [
 				'id',
