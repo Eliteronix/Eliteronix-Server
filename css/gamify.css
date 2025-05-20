@@ -136,7 +136,7 @@ body {
 .particle {
 	position: absolute;
 	border-radius: 50%;
-	background: rgba(51, 159, 209, 0.9);
+	background: rgba(60, 178, 233, 0.9);
 	animation: float 20s linear infinite;
 }
 
