@@ -116,9 +116,15 @@
 							for (let i = 0; i < category.tasks.length; i++) {
 								let task = category.tasks[i];
 
-								totalTaskWeight += task.weight;
+								let weight = 1;
+
+								if(task.weight){
+									weight = task.weight;
+								}
+
+								totalTaskWeight += weight;
 								if (task.done) {
-									doneTaskWeight += task.weight;
+									doneTaskWeight += weight;
 								}
 							}
 
