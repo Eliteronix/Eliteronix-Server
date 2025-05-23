@@ -107,10 +107,14 @@
 						taskDiv.className = 'task';
 
 						if (category.percentageDone === '100%') {
-							taskDiv.classList.toggle('hidden');
+							taskDiv.classList.add('hidden');
 						}
 
 						if (task.done) {
+							if (!showDone) {
+								taskDiv.classList.add('hidden');
+							}
+
 							taskDiv.classList.add('done');
 							taskDiv.style.order = 2;
 						} else {
