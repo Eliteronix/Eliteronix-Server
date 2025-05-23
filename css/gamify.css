@@ -24,8 +24,26 @@ body {
 	z-index: 0;
 }
 
+.header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	/* fit the width to the content */
+	width: auto;
+	height: auto;
+	padding: 10px 20px;
+	background-color: rgba(255, 255, 255, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 2;
+	/*Only apply border radius to bottom right*/
+	border-bottom-right-radius: 20px;
+}
+
 .scroll-container {
-	height: 100%;
+	height: 100% - 40px;
+	padding-top: 40px;
 	overflow: auto;
 
 	/* Hide scrollbars - cross-browser */
@@ -150,4 +168,45 @@ body {
 		transform: translateY(-100vh) scale(1);
 		opacity: 0;
 	}
+}
+
+.switch {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: sans-serif;
+}
+
+.switch input {
+	display: none;
+}
+
+.slider {
+	position: relative;
+	width: 40px;
+	height: 20px;
+	background-color: #ccc;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.slider::before {
+	content: "";
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	left: 2px;
+	top: 2px;
+	background-color: white;
+	border-radius: 50%;
+	transition: transform 0.2s;
+}
+
+input:checked+.slider {
+	background-color: #4e51d4;
+}
+
+input:checked+.slider::before {
+	transform: translateX(20px);
 }
