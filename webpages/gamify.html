@@ -129,18 +129,10 @@
 						if (task.dateLastDone) {
 							const date = new Date(task.dateLastDone);
 							const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+							const timeOptions = { hour: '2-digit', minute: '2-digit' };
 
-							let yesterday = new Date();
-							yesterday.setDate(yesterday.getDate() - 1);
+							taskDiv.innerHTML += `<p class="lastDone">${date.toLocaleDateString(undefined, options)} at ${date.toLocaleTimeString(undefined, timeOptions)}</p>`;
 
-							if (date > yesterday) {
-								// Add time to the date
-								const timeOptions = { hour: '2-digit', minute: '2-digit' };
-								taskDiv.innerHTML += `<p class="lastDone">Last done: ${date.toLocaleDateString(undefined, options)} at ${date.toLocaleTimeString(undefined, timeOptions)}</p>`;
-							} else {
-								// Only show the date
-								taskDiv.innerHTML += `<p class="lastDone">Last done: ${date.toLocaleDateString(undefined, options)}</p>`;
-							}
 						}
 
 						// Add a click event to toggle the task's done status
