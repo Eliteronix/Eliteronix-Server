@@ -117,13 +117,13 @@
 
 							taskDiv.classList.add('done');
 							taskDiv.style.order = 2;
+
+							taskDiv.innerHTML = `<p class="taskName taskNameDone">${task.name}</p>`;
 						} else {
 							taskDiv.style.order = 1;
-						}
 
-						taskDiv.innerHTML = `
-					<p>${task.name}</p>
-					`;
+							taskDiv.innerHTML = `<p class="taskName">${task.name}</p>`;
+						}
 
 						// If the task has a dateLastDone, display it
 						if (task.dateLastDone) {
@@ -139,6 +139,9 @@
 							task.done = !task.done;
 							taskDiv.classList.toggle('done');
 							taskDiv.style.order = task.done ? 2 : 1;
+
+							const taskNameElement = taskDiv.querySelector('.taskName');
+							taskNameElement.classList.toggle('taskNameDone', task.done);
 
 							// Update the task's done status in the data array
 							const taskIndex = category.tasks.indexOf(task);
