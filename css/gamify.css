@@ -140,6 +140,14 @@ body {
 	text-align: right;
 }
 
+.task .lastDone {
+	display: none;
+}
+
+.task:hover .lastDone {
+	display: block;
+}
+
 .hidden {
 	display: none;
 }
