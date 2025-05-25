@@ -133,6 +133,13 @@ body {
 	color: #ccc;
 }
 
+.lastDone {
+	color: #808080;
+	text-decoration: none;
+	font-style: italic;
+	text-align: right;
+}
+
 .hidden {
 	display: none;
 }

@@ -125,6 +125,24 @@
 					<p>${task.name}</p>
 					`;
 
+						// If the task has a dateLastDone, display it
+						if (task.dateLastDone) {
+							const date = new Date(task.dateLastDone);
+							const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+							let yesterday = new Date();
+							yesterday.setDate(yesterday.getDate() - 1);
+
+							if (date > yesterday) {
+								// Add time to the date
+								const timeOptions = { hour: '2-digit', minute: '2-digit' };
+								taskDiv.innerHTML += `<p class="lastDone">Last done: ${date.toLocaleDateString(undefined, options)} at ${date.toLocaleTimeString(undefined, timeOptions)}</p>`;
+							} else {
+								// Only show the date
+								taskDiv.innerHTML += `<p class="lastDone">Last done: ${date.toLocaleDateString(undefined, options)}</p>`;
+							}
+						}
+
 						// Add a click event to toggle the task's done status
 						taskDiv.addEventListener('click', () => {
 							task.done = !task.done;
