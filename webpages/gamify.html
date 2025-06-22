@@ -227,6 +227,10 @@
 				}
 
 			});
+
+			const container = document.querySelector('.scroll-container');
+			container.offsetHeight; // Trigger reflow
+			container.scrollTop = container.scrollHeight; // Scroll to bottom, if desired
 		});
 	</script>
 </body>
