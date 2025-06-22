@@ -95,8 +95,12 @@
 								task.classList.add('hidden');
 							}
 
-							if (categoryDivHeader.classList.contains('expanded') && showDone) {
-								task.classList.remove('hidden');
+							if (categoryDivHeader.classList.contains('expanded')) {
+								if (task.classList.contains('done') && showDone) {
+									task.classList.remove('hidden');
+								} else if (!task.classList.contains('done')) {
+									task.classList.remove('hidden');
+								}
 							}
 						});
 					});
