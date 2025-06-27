@@ -11,7 +11,18 @@
     "renewOffset": "-45d",
     "renewStagger": "3d",
     "accountKeyType": "EC-P256",
-    "serverKeyType": "RSA-2048"
+    "serverKeyType": "RSA-2048",
+    "agreeToTerms": true,
+    "subscriberEmail": "zimmermann.mariomarvin@gmail.com"
   },
-  "sites": []
+  "sites": [
+    {
+      "subject": "eliteronix.de",
+      "altnames": [
+        "eliteronix.de",
+        "www.eliteronix.de"
+      ],
+      "renewAt": 1
+    }
+  ]
 }
