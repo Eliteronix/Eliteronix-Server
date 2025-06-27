@@ -1,7 +1,6 @@
 {
 	"script": "server.js",
 	"name": "Server",
-	"interpreter": "bun",
 	"nodeArgs": "--use_strict",
 	"watch": true
 }
