@@ -4,6 +4,9 @@ const osu = require('node-osu');
 let osuv2_access_token = null;
 let playerNames;
 
+const blueColour = '#2299BB';
+const redColour = '#BB1177';
+
 module.exports = {
 	async execute(req, res) {
 		const urlParams = new URLSearchParams(req.url.split('?')[1]);
@@ -134,14 +137,23 @@ module.exports = {
 								redTotalScore += redScores[i].score;
 							}
 
+							let blueTeamNames = blueTeam.join(', ');
+							let redTeamNames = redTeam.join(', ');
+
 							if (blueTotalScore > redTotalScore) {
 								blueScore++;
 
 								lastMapWinner = 'blue';
+
+								playerUpdates.push(`${blueTeamNames} won against ${redTeamNames}`);
+								playerUpdates.push(`<span style="color:${blueColour};">${blueTotalScore}</span> to <span style="color:${redColour};">${redTotalScore}</span>`);
 							} else if (blueTotalScore < redTotalScore) {
 								redScore++;
 
 								lastMapWinner = 'red';
+
+								playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
+								playerUpdates.push(`<span style="color:${redColour};">${redTotalScore}</span> to <span style="color:${blueColour};">${blueTotalScore}</span>`);
 							}
 						} else if (json.events[i].game.scores.length === 2) {
 							//Head to head
@@ -227,9 +239,9 @@ module.exports = {
 
 						if (teamNames[1] && redScore > blueScore) {
 
-							playerUpdates.push(`<b><span style="color:#BB1177;">${teamNames[0].replace(/.+\(/gm, '')}</span></b> won the match.`);
+							playerUpdates.push(`<b><span style="color:${redColour};">${teamNames[0].replace(/.+\(/gm, '')}</span></b> won the match.`);
 						} else if (teamNames[1] && redScore < blueScore) {
-							playerUpdates.push(`<b><span style="color:#2299BB;">${teamNames[1].replace(')', '')}</span></b> won the match.`);
+							playerUpdates.push(`<b><span style="color:${blueColour};">${teamNames[1].replace(')', '')}</span></b> won the match.`);
 						} else {
 							playerUpdates.push('The match is over');
 						}
@@ -243,14 +255,14 @@ module.exports = {
 				for (let i = 0; i < playerUpdates.length; i++) {
 					for (let j = 0; j < redTeam.length; j++) {
 						if (playerUpdates[i].includes(redTeam[j])) {
-							playerUpdates[i] = playerUpdates[i].replace(redTeam[j], `<b><span style="color:#BB1177;">${redTeam[j]}</span></b>`);
+							playerUpdates[i] = playerUpdates[i].replace(redTeam[j], `<b><span style="color:${redColour};">${redTeam[j]}</span></b>`);
 							break;
 						}
 					}
 
 					for (let j = 0; j < blueTeam.length; j++) {
 						if (playerUpdates[i].includes(blueTeam[j])) {
-							playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:#2299BB;">${blueTeam[j]}</span></b>`);
+							playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:${blueColour};">${blueTeam[j]}</span></b>`);
 							break;
 						}
 					}
