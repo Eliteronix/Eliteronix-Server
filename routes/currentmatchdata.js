@@ -197,14 +197,23 @@ module.exports = {
 									}
 								}
 
+								let blueTeamNames = blueTeam.join(', ');
+								let redTeamNames = redTeam.join(', ');
+
 								if (blueTotal > redTotal) {
 									blueScore++;
 
 									lastMapWinner = 'blue';
+
+									playerUpdates.push(`${blueTeamNames} won against ${redTeamNames}`);
+									playerUpdates.push(`<span style="color:${blueColour};">${blueTotal}</span> to <span style="color:${redColour};">${redTotal}</span>`);
 								} else if (blueTotal < redTotal) {
 									redScore++;
 
 									lastMapWinner = 'red';
+
+									playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
+									playerUpdates.push(`<span style="color:${redColour};">${redTotal}</span> to <span style="color:${blueColour};">${blueTotal}</span>`);
 								}
 							}
 						}
