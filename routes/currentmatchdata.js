@@ -155,6 +155,8 @@ module.exports = {
 								playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
 								playerUpdates.push(`<b><span style="color:${redColour};">${humanReadable(redTotalScore)}</span></b> to <b><span style="color:${blueColour};">${humanReadable(blueTotalScore)}</span></b>`);
 							}
+
+							playerUpdates.push('');
 						} else if (json.events[i].game.scores.length === 2) {
 							//Head to head
 							let playerNames = json.match.name.split(/\) ?vs.? ?\(/gm);
@@ -215,6 +217,8 @@ module.exports = {
 									playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
 									playerUpdates.push(`<b><span style="color:${redColour};">${humanReadable(redTotal)}</span></b> to <b><span style="color:${blueColour};">${humanReadable(blueTotal)}</span></b>`);
 								}
+
+								playerUpdates.push('');
 							}
 						}
 					} else if (json.events[i].detail.type === 'host-changed' && json.events[i].user_id) {
