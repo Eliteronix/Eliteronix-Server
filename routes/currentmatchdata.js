@@ -146,14 +146,14 @@ module.exports = {
 								lastMapWinner = 'blue';
 
 								playerUpdates.push(`${blueTeamNames} won against ${redTeamNames}`);
-								playerUpdates.push(`<span style="color:${blueColour};">${blueTotalScore}</span> to <span style="color:${redColour};">${redTotalScore}</span>`);
+								playerUpdates.push(`<b><span style="color:${blueColour};">${humanReadable(blueTotalScore)}</span></b> to <b><span style="color:${redColour};">${humanReadable(redTotalScore)}</span></b>`);
 							} else if (blueTotalScore < redTotalScore) {
 								redScore++;
 
 								lastMapWinner = 'red';
 
 								playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
-								playerUpdates.push(`<span style="color:${redColour};">${redTotalScore}</span> to <span style="color:${blueColour};">${blueTotalScore}</span>`);
+								playerUpdates.push(`<b><span style="color:${redColour};">${humanReadable(redTotalScore)}</span></b> to <b><span style="color:${blueColour};">${humanReadable(blueTotalScore)}</span></b>`);
 							}
 						} else if (json.events[i].game.scores.length === 2) {
 							//Head to head
@@ -206,14 +206,14 @@ module.exports = {
 									lastMapWinner = 'blue';
 
 									playerUpdates.push(`${blueTeamNames} won against ${redTeamNames}`);
-									playerUpdates.push(`<span style="color:${blueColour};">${blueTotal}</span> to <span style="color:${redColour};">${redTotal}</span>`);
+									playerUpdates.push(`<b><span style="color:${blueColour};">${humanReadable(blueTotal)}</span></b> to <b><span style="color:${redColour};">${humanReadable(redTotal)}</span></b>`);
 								} else if (blueTotal < redTotal) {
 									redScore++;
 
 									lastMapWinner = 'red';
 
 									playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
-									playerUpdates.push(`<span style="color:${redColour};">${redTotal}</span> to <span style="color:${blueColour};">${blueTotal}</span>`);
+									playerUpdates.push(`<b><span style="color:${redColour};">${humanReadable(redTotal)}</span></b> to <b><span style="color:${blueColour};">${humanReadable(blueTotal)}</span></b>`);
 								}
 							}
 						}
@@ -352,4 +352,19 @@ async function getNewOsuAPIv2TokenIfNecessary() {
 			osuv2_access_token = null;
 		}, json.expires_in * 1000);
 	});
+}
+
+function humanReadable(input) {
+	let output = '';
+	if (input) {
+		input = input.toString();
+		for (let i = 0; i < input.length; i++) {
+			if (i > 0 && (input.length - i) % 3 === 0) {
+				output = output + ',';
+			}
+			output = output + input.charAt(i);
+		}
+	}
+
+	return output;
 }
