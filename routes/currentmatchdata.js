@@ -269,14 +269,12 @@ module.exports = {
 					for (let j = 0; j < redTeam.length; j++) {
 						if (playerUpdates[i].includes(redTeam[j])) {
 							playerUpdates[i] = playerUpdates[i].replace(redTeam[j], `<b><span style="color:${redColour};">${redTeam[j]}</span></b>`);
-							break;
 						}
 					}
 
 					for (let j = 0; j < blueTeam.length; j++) {
 						if (playerUpdates[i].includes(blueTeam[j])) {
 							playerUpdates[i] = playerUpdates[i].replace(blueTeam[j], `<b><span style="color:${blueColour};">${blueTeam[j]}</span></b>`);
-							break;
 						}
 					}
 				}
