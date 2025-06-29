@@ -240,11 +240,21 @@ module.exports = {
 						}
 					} else if (json.events[i].detail.type === 'player-joined') {
 						let playerName = await getOsuPlayerName(json.events[i].user_id);
-						playerUpdates.push(`${playerName} joined`);
+						// If the player left before, remove the "left" message instead of adding a new "joined" message
+						if (playerUpdates.indexOf(`${playerName} left`) === -1) {
+							playerUpdates.push(`${playerName} joined`);
+						} else {
+							playerUpdates.splice(playerUpdates.indexOf(`${playerName} left`), 1);
+						}
 						currentPlayers.push(playerName);
 					} else if (json.events[i].detail.type === 'player-left') {
 						let playerName = await getOsuPlayerName(json.events[i].user_id);
-						playerUpdates.push(`${playerName} left`);
+						// If the player joined before, remove the "joined" message instead of adding a new "left" message
+						if (playerUpdates.indexOf(`${playerName} joined`) === -1) {
+							playerUpdates.push(`${playerName} left`);
+						} else {
+							playerUpdates.splice(playerUpdates.indexOf(`${playerName} joined`), 1);
+						}
 						currentPlayers = currentPlayers.filter(player => player !== playerName);
 					} else if (json.events[i].detail.type === 'player-kicked') {
 						let playerName = await getOsuPlayerName(json.events[i].user_id);
