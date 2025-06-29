@@ -2,3 +2,5 @@
 node_modules
 .greenlockrc
 greenlock.d
+localcert/localhost.crt
+localcert/localhost.key

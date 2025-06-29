@@ -34,21 +34,41 @@ const requestHandler = async (req, res) => {
 	}
 };
 
-// Start the HTTP server which exposes the browsersources on http://localhost:80/duelRating/1234
-//browserSourceServer.listen(80);
+if (returnBoolean(process.env.STAGING)) {
+	// eslint-disable-next-line no-console
+	console.log('Running in staging mode without greenlock');
 
-// Start the HTTPS server which exposes the browsersources on https://localhost:443/duelRating/1234
-// browserSourceServer.listen(443);
+	// Start the HTTP server which exposes the browsersources on http://localhost:80/duelRating/1234
+	// const http = require('http');
+	// const browserSourceServer = http.createServer(requestHandler);
+	// browserSourceServer.listen(80, () => {
+	// 	console.log('HTTP server running on http://localhost:80');
+	// });
 
-// Greenlock setup
-Greenlock.init({
-	packageRoot: __dirname,
-	configDir: './greenlock.d',
-	maintainerEmail: 'zimmermann.mariomarvin@gmail.com',
-	cluster: false,
-	agreeToTerms: true,
-	staging: returnBoolean(process.env.STAGING),
-}).serve(requestHandler);
+	// Uncomment the following lines to start an HTTPS server with self-signed certificates
+	const https = require('https');
+	const fs = require('fs');
+	const options = {
+		key: fs.readFileSync('localcert/localhost.key'),
+		cert: fs.readFileSync('localcert/localhost.crt'),
+	};
+
+	const browserSourceServer = https.createServer(options, requestHandler);
+	browserSourceServer.listen(443, () => {
+		// eslint-disable-next-line no-console
+		console.log('HTTPS server running on https://localhost:443');
+	});
+} else {
+	// Greenlock setup
+	Greenlock.init({
+		packageRoot: __dirname,
+		configDir: './greenlock.d',
+		maintainerEmail: 'zimmermann.mariomarvin@gmail.com',
+		cluster: false,
+		agreeToTerms: true,
+		staging: returnBoolean(process.env.STAGING),
+	}).serve(requestHandler);
+}
 
 function returnBoolean(value) {
 	if (value === 'false') return false;

@@ -94,8 +94,12 @@ module.exports = {
 						let blueScores = json.events[i].game.scores.filter(score => score.match.team === 'blue');
 						let redScores = json.events[i].game.scores.filter(score => score.match.team === 'red');
 
+						let blueTeamNames = [];
+
 						for (let j = 0; j < blueScores.length; j++) {
 							let playerName = await getOsuPlayerName(blueScores[j].user_id);
+
+							blueTeamNames.push(playerName);
 
 							if (blueTeam.indexOf(playerName) === -1) {
 								blueTeam.push(playerName);
@@ -108,8 +112,12 @@ module.exports = {
 							}
 						}
 
+						let redTeamNames = [];
+
 						for (let j = 0; j < redScores.length; j++) {
 							let playerName = await getOsuPlayerName(redScores[j].user_id);
+
+							redTeamNames.push(playerName);
 
 							if (redTeam.indexOf(playerName) === -1) {
 								redTeam.push(playerName);
@@ -121,6 +129,9 @@ module.exports = {
 								blueTeam.splice(wrongPlayerIndex, 1);
 							}
 						}
+
+						blueTeamNames = blueTeamNames.join(', ');
+						redTeamNames = redTeamNames.join(', ');
 
 						if (blueScores.length || redScores.length) {
 							//Team vs
@@ -136,9 +147,6 @@ module.exports = {
 							for (let i = 0; i < redScores.length; i++) {
 								redTotalScore += redScores[i].score;
 							}
-
-							let blueTeamNames = blueTeam.join(', ');
-							let redTeamNames = redTeam.join(', ');
 
 							if (blueTotalScore > redTotalScore) {
 								blueScore++;
@@ -199,22 +207,19 @@ module.exports = {
 									}
 								}
 
-								let blueTeamNames = blueTeam.join(', ');
-								let redTeamNames = redTeam.join(', ');
-
 								if (blueTotal > redTotal) {
 									blueScore++;
 
 									lastMapWinner = 'blue';
 
-									playerUpdates.push(`${blueTeamNames} won against ${redTeamNames}`);
+									playerUpdates.push(`${bluePlayer} won against ${redPlayer}`);
 									playerUpdates.push(`<b><span style="color:${blueColour};">${humanReadable(blueTotal)}</span></b> to <b><span style="color:${redColour};">${humanReadable(redTotal)}</span></b>`);
 								} else if (blueTotal < redTotal) {
 									redScore++;
 
 									lastMapWinner = 'red';
 
-									playerUpdates.push(`${redTeamNames} won against ${blueTeamNames}`);
+									playerUpdates.push(`${redPlayer} won against ${bluePlayer}`);
 									playerUpdates.push(`<b><span style="color:${redColour};">${humanReadable(redTotal)}</span></b> to <b><span style="color:${blueColour};">${humanReadable(blueTotal)}</span></b>`);
 								}
 
