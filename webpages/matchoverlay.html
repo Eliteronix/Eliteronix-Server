@@ -29,6 +29,9 @@
 	<p id="redScore" style="left:0px; top:15px; width:245px; font-size: 2rem; color:#BB1177; text-align: right"></p>
 	<p id="blueScore" style="left:255px; top:15px; width:245px; font-size: 2rem; color:#2299BB; text-align: left"></p>
 
+	<p id="qualifierMap" style="left:0px; top:15px; width:500px; font-size: 2rem; color:#FFFFFF; text-align: center">
+	</p>
+
 	<img id="matchoverlay-currentmap" class="map" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
 		alt="Matchoverlay Current Map" style="width:500px;height:139px;">
 
@@ -61,32 +64,46 @@
 							let redScore = '';
 							let blueScore = '';
 
-							let extraRound = 0;
+							let qualifierMap = '';
 
-							if (currentMatchData.redScore === currentMatchData.blueScore || currentMatchData.currentMapsetId) {
-								extraRound = 1;
+							if (currentMatchData.title.toLowerCase().includes('qualifier')) {
+								for (let i = 0; i < currentMatchData.mapNumber; i++) {
+									qualifierMap += '◆';
+								}
+
+								while (qualifierMap.length < 10) {
+									qualifierMap = qualifierMap + '◇';
+								}
+
+								document.getElementById('qualifierMap').innerText = qualifierMap;
+							} else {
+								let extraRound = 0;
+
+								if (currentMatchData.redScore === currentMatchData.blueScore || currentMatchData.currentMapsetId) {
+									extraRound = 1;
+								}
+
+								let maximumScore = Math.max(currentMatchData.redScore + extraRound, currentMatchData.blueScore + extraRound, 4);
+
+								for (let i = 0; i < currentMatchData.redScore; i++) {
+									redScore += '◆';
+								}
+
+								while (redScore.length < maximumScore) {
+									redScore = '◇' + redScore;
+								}
+
+								for (let i = 0; i < currentMatchData.blueScore; i++) {
+									blueScore += '◆';
+								}
+
+								while (blueScore.length < maximumScore) {
+									blueScore = blueScore + '◇';
+								}
+
+								document.getElementById('redScore').innerText = redScore;
+								document.getElementById('blueScore').innerText = blueScore;
 							}
-
-							let maximumScore = Math.max(currentMatchData.redScore + extraRound, currentMatchData.blueScore + extraRound, 4);
-
-							for (let i = 0; i < currentMatchData.redScore; i++) {
-								redScore += '◆';
-							}
-
-							while (redScore.length < maximumScore) {
-								redScore = '◇' + redScore;
-							}
-
-							for (let i = 0; i < currentMatchData.blueScore; i++) {
-								blueScore += '◆';
-							}
-
-							while (blueScore.length < maximumScore) {
-								blueScore = blueScore + '◇';
-							}
-
-							document.getElementById('redScore').innerText = redScore;
-							document.getElementById('blueScore').innerText = blueScore;
 
 							if (currentMatchData.currentMapsetId) {
 								document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.currentMapsetId}/covers/cover.jpg`;

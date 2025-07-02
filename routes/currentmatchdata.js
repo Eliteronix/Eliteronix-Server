@@ -72,6 +72,7 @@ module.exports = {
 				let blueScore = 0; //Score on the right side / last slots
 				let currentMapsetId = null;
 				let currentMapMods = null;
+				let mapNumber = 0;
 				let lastMapWinner = null;
 				let redTeam = [];
 				let blueTeam = [];
@@ -81,6 +82,8 @@ module.exports = {
 					currentMapMods = null;
 
 					if (json.events[i].detail.type === 'other') {
+						mapNumber++;
+
 						//Get the last map id
 						if (json.events[i].game.beatmap_id && json.events[i].game.end_time === null) {
 							currentMapsetId = json.events[i].game.beatmap.beatmapset.id;
@@ -303,6 +306,7 @@ module.exports = {
 					'finished': json.match.end_time,
 					'currentMapsetId': currentMapsetId,
 					'currentMapMods': currentMapMods,
+					'mapNumber': mapNumber,
 					'lastMapWinner': lastMapWinner,
 					'redTeam': redTeam,
 					'blueTeam': blueTeam
