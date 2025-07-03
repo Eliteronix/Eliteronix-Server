@@ -8,7 +8,7 @@ module.exports = {
 		if (!userId || isNaN(userId)) {
 			// Send back an HTML file
 			res.setHeader('Content-Type', 'text/html');
-			res.end(fs.readFileSync('./webpages/matchoverlay.html'));
+			res.end(fs.readFileSync('./webpages/matchoverlay-setup.html'));
 			return;
 		}
 
