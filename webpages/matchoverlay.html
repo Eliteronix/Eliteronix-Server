@@ -66,13 +66,17 @@
 
 							let qualifierMap = '';
 
-							if (currentMatchData.title.toLowerCase().includes('qualifier')) {
+							if (currentMatchData.redTeam.length === 0 && currentMatchData.blueTeam.length === 0) {
 								for (let i = 0; i < currentMatchData.mapNumber; i++) {
 									qualifierMap += '◆';
 								}
 
 								while (qualifierMap.length < 10) {
 									qualifierMap = qualifierMap + '◇';
+								}
+
+								if (qualifierMap.length > 14) {
+									qualifierMap = `Map #${currentMatchData.mapNumber}`;
 								}
 
 								document.getElementById('qualifierMap').innerText = qualifierMap;
