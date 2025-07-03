@@ -130,6 +130,15 @@
 								document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
 							}
 
+							document.querySelector('.mods').innerHTML = '';
+
+							currentMatchData.currentMapMods.forEach(mod => {
+								const modImage = document.createElement('img');
+								modImage.src = `${window.location.origin}/modimage/${mod}`;
+								modImage.alt = mod;
+								modImage.className = 'mod-image';
+								document.querySelector('.mods').appendChild(modImage);
+							});
 						});
 				});
 		}
@@ -145,7 +154,7 @@
 			.then(() => {
 				setInterval(async () => {
 					await getCurrentMatch();
-				}, 60000);
+				}, 30000);
 			});
 	</script>
 </body>
