@@ -53,99 +53,113 @@
 					let oldMatchId = currentMatchId;
 					currentMatchId = data.matchId;
 
-					document.getElementById('url').innerText = `https://osu.ppy.sh/mp/${currentMatchId}`;
-
-					if (currentMatchId === oldMatchId && currentMatchData && currentMatchData.finished) {
-						// If the match id is the same and finished already, no need to fetch again
-						return;
+					if (oldMatchId !== currentMatchId) {
+						document.body.classList.remove('fade-out');
 					}
 
-					// Get the current match data
-					await fetch(`${window.location.origin}/currentmatchdata?m=${currentMatchId}`)
-						.then(response => response.json())
-						.then(async (data) => {
-							currentMatchData = data;
+					document.getElementById('url').innerText = `https://osu.ppy.sh/mp/${currentMatchId}`;
 
-							document.getElementById('title').innerText = currentMatchData.title;
+					if (currentMatchId !== oldMatchId || !currentMatchData || currentMatchData && !currentMatchData.finished) {
+						// Get the current match data
+						await fetch(`${window.location.origin}/currentmatchdata?m=${currentMatchId}`)
+							.then(response => response.json())
+							.then(async (data) => {
+								currentMatchData = data;
 
-							let redScore = '';
-							let blueScore = '';
+								document.getElementById('title').innerText = currentMatchData.title;
 
-							let qualifierMap = '';
+								let redScore = '';
+								let blueScore = '';
 
-							if (currentMatchData.redTeam.length === 0 && currentMatchData.blueTeam.length === 0) {
-								for (let i = 0; i < currentMatchData.mapNumber; i++) {
-									qualifierMap += '◆';
+								let qualifierMap = '';
+
+								if (currentMatchData.redTeam.length === 0 && currentMatchData.blueTeam.length === 0) {
+									for (let i = 0; i < currentMatchData.mapNumber; i++) {
+										qualifierMap += '◆';
+									}
+
+									while (qualifierMap.length < 10) {
+										qualifierMap = qualifierMap + '◇';
+									}
+
+									if (qualifierMap.length > 14) {
+										qualifierMap = `Map #${currentMatchData.mapNumber}`;
+									}
+
+									document.getElementById('qualifierMap').innerText = qualifierMap;
+								} else {
+									let extraRound = 0;
+
+									if (currentMatchData.redScore === currentMatchData.blueScore || currentMatchData.currentMapsetId) {
+										extraRound = 1;
+									}
+
+									let maximumScore = Math.max(currentMatchData.redScore + extraRound, currentMatchData.blueScore + extraRound, 4);
+
+									for (let i = 0; i < currentMatchData.redScore; i++) {
+										redScore += '◆';
+									}
+
+									while (redScore.length < maximumScore) {
+										redScore = '◇' + redScore;
+									}
+
+									for (let i = 0; i < currentMatchData.blueScore; i++) {
+										blueScore += '◆';
+									}
+
+									while (blueScore.length < maximumScore) {
+										blueScore = blueScore + '◇';
+									}
+
+									document.getElementById('redScore').innerText = redScore;
+									document.getElementById('blueScore').innerText = blueScore;
 								}
 
-								while (qualifierMap.length < 10) {
-									qualifierMap = qualifierMap + '◇';
+								if (currentMatchData.currentMapsetId) {
+									document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.currentMapsetId}/covers/cover.jpg`;
+
+									document.getElementById('playerUpdates').innerText = '';
+								} else {
+									document.getElementById('matchoverlay-currentmap').src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
+									while (currentMatchData.playerUpdates.length > 7) {
+										currentMatchData.playerUpdates.shift();
+									}
+
+									document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
 								}
 
-								if (qualifierMap.length > 14) {
-									qualifierMap = `Map #${currentMatchData.mapNumber}`;
+								document.querySelector('.mods').innerHTML = '';
+
+								if (currentMatchData.currentMapMods) {
+									currentMatchData.currentMapMods.forEach(mod => {
+										const modImage = document.createElement('img');
+										modImage.src = `${window.location.origin}/modimage/${mod}`;
+										modImage.alt = mod;
+										modImage.className = 'mod-image';
+										document.querySelector('.mods').appendChild(modImage);
+									});
 								}
-
-								document.getElementById('qualifierMap').innerText = qualifierMap;
-							} else {
-								let extraRound = 0;
-
-								if (currentMatchData.redScore === currentMatchData.blueScore || currentMatchData.currentMapsetId) {
-									extraRound = 1;
-								}
-
-								let maximumScore = Math.max(currentMatchData.redScore + extraRound, currentMatchData.blueScore + extraRound, 4);
-
-								for (let i = 0; i < currentMatchData.redScore; i++) {
-									redScore += '◆';
-								}
-
-								while (redScore.length < maximumScore) {
-									redScore = '◇' + redScore;
-								}
-
-								for (let i = 0; i < currentMatchData.blueScore; i++) {
-									blueScore += '◆';
-								}
-
-								while (blueScore.length < maximumScore) {
-									blueScore = blueScore + '◇';
-								}
-
-								document.getElementById('redScore').innerText = redScore;
-								document.getElementById('blueScore').innerText = blueScore;
-							}
-
-							if (currentMatchData.currentMapsetId) {
-								document.getElementById('matchoverlay-currentmap').src = `https://assets.ppy.sh/beatmaps/${currentMatchData.currentMapsetId}/covers/cover.jpg`;
-
-								document.getElementById('playerUpdates').innerText = '';
-							} else {
-								document.getElementById('matchoverlay-currentmap').src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-
-								while (currentMatchData.playerUpdates.length > 7) {
-									currentMatchData.playerUpdates.shift();
-								}
-
-								document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
-							}
-
-							document.querySelector('.mods').innerHTML = '';
-
-							currentMatchData.currentMapMods.forEach(mod => {
-								const modImage = document.createElement('img');
-								modImage.src = `${window.location.origin}/modimage/${mod}`;
-								modImage.alt = mod;
-								modImage.className = 'mod-image';
-								document.querySelector('.mods').appendChild(modImage);
 							});
-						});
+					}
+
+					// Fade out the overlay if the match finished more than fadeOutTime ago
+					if (currentMatchData.finished) {
+						let matchFinishedTime = new Date(currentMatchData.finished);
+						if (matchFinishedTime.getTime() + fadeOutTime < Date.now()) {
+							console.log('Match finished, fading out overlay');
+							// Add the fade-out class to the body
+							document.body.classList.add('fade-out');
+						}
+					}
 				});
 		}
 
 		// Get the player id from the URL
 		const urlParams = new URLSearchParams(window.location.search);
 		const playerId = urlParams.get('u');
+		const fadeOutTime = urlParams.get('f') || 1000 * 60 * 5; // Default to 5 minutes if not provided
 
 		let currentMatchId = null;
 		let currentMatchData = null;

@@ -1,5 +1,7 @@
 body {
 	font-family: 'comfortaa', sans-serif, Arial;
+	transition: opacity 1s ease;
+	opacity: 1;
 }
 
 p {
@@ -47,4 +49,8 @@ p {
 	width: 45px;
 	height: 32px;
 	margin-right: 5px;
+}
+
+.fade-out {
+	opacity: 0;
 }
