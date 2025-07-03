@@ -67,6 +67,10 @@ if (returnBoolean(process.env.STAGING)) {
 		cluster: false,
 		agreeToTerms: true,
 		staging: returnBoolean(process.env.STAGING),
+		notify: (event, details) => {
+			// eslint-disable-next-line no-console
+			console.log('Greenlock event:', event, details);
+		},
 	}).serve(requestHandler);
 }
 
