@@ -229,6 +229,11 @@ module.exports = {
 								playerUpdates.push('');
 							}
 						}
+
+						if (redTeam.length === 0 && blueTeam.length === 0) {
+							playerUpdates.push(`Finished map #${mapNumber}`);
+							playerUpdates.push('');
+						}
 					} else if (json.events[i].detail.type === 'host-changed' && json.events[i].user_id) {
 						let playerName = await getOsuPlayerName(json.events[i].user_id);
 						playerUpdates.push(`${playerName} became the host.`);
