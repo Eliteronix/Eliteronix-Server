@@ -49,9 +49,15 @@
 			await fetch(`${window.location.origin}/currentmatch?u=${playerId}`)
 				.then(response => response.json())
 				.then(async (data) => {
+					let oldMatchId = currentMatchId;
 					currentMatchId = data.matchId;
 
 					document.getElementById('url').innerText = `https://osu.ppy.sh/mp/${currentMatchId}`;
+
+					if (currentMatchId === oldMatchId && currentMatchData && currentMatchData.finished) {
+						// If the match id is the same and finished already, no need to fetch again
+						return;
+					}
 
 					// Get the current match data
 					await fetch(`${window.location.origin}/currentmatchdata?m=${currentMatchId}`)
