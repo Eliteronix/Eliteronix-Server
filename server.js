@@ -67,9 +67,12 @@ if (returnBoolean(process.env.STAGING)) {
 		cluster: false,
 		agreeToTerms: true,
 		staging: returnBoolean(process.env.STAGING),
+		debug: false,
 		notify: (event, details) => {
-			// eslint-disable-next-line no-console
-			console.log('Greenlock event:', event, details);
+			if (event !== 'servername_unknown') {
+				// eslint-disable-next-line no-console
+				console.log('Greenlock event:', event, details);
+			}
 		},
 	}).serve(requestHandler);
 }
