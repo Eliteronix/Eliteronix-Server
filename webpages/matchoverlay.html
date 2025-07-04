@@ -36,7 +36,7 @@
 		alt="Matchoverlay Current Map" style="width:500px; height:139px;">
 	<div class="mods" style="width:500px; height:139px"></div>
 
-	<p id="playerUpdates" style="left:0px; top:85px; width:500px; height:139px; font-size: 1rem"></p>
+	<p id="playerUpdates" style="left:0px; top:85px; width:500px; font-size: 1rem"></p>
 
 	<p id="url" style="left:0px; top:220px; width:500px; font-size: 0.8rem;"></p>
 
@@ -123,8 +123,25 @@
 								} else {
 									document.getElementById('matchoverlay-currentmap').src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
-									while (currentMatchData.playerUpdates.length > 7) {
+									// Removed the last if empty
+									if (currentMatchData.playerUpdates[currentMatchData.playerUpdates.length - 1] === '') {
+										currentMatchData.playerUpdates.pop();
+									}
+
+									document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
+
+									let playerUpdatesHeight = document.getElementById('playerUpdates').offsetHeight;
+
+									while (playerUpdatesHeight > 139) {
 										currentMatchData.playerUpdates.shift();
+
+										if (currentMatchData.playerUpdates[0] === '') {
+											currentMatchData.playerUpdates.shift();
+										}
+
+										document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
+
+										playerUpdatesHeight = document.getElementById('playerUpdates').offsetHeight;
 									}
 
 									document.getElementById('playerUpdates').innerHTML = currentMatchData.playerUpdates.join('<br>');
