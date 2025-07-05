@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Gamify</title>
+	<link rel="stylesheet" type="text/css" id="gamify-css">
+</head>
+
+<body>
+	<script>
+		const styleSheet = `
+  @font-face {
+	font-family: 'comfortaa';
+	src: url('${window.location.origin}/comfortaa-regular') format('ttf');
+  }
+`;
+
+		const styleTag = document.createElement("style");
+		styleTag.innerHTML = styleSheet;
+		document.head.appendChild(styleTag);
+
+		// Check if the user has guilds in localStorage
+		let userGuilds = localStorage.getItem('userGuilds');
+		if (userGuilds) {
+			userGuilds = JSON.parse(userGuilds);
+
+			let currentGuildId = new URLSearchParams(window.location.search).get('g') || '';
+
+			let currentGuild = userGuilds.find(guild => guild.id === currentGuildId);
+
+			if (!currentGuild) {
+				// If no current guild is set, redirect to the select guild page
+				window.location.href = `${window.location.origin}/gamify`;
+			}
+		} else {
+			// If no guild info is found
+			window.location.href = `https://discord.com/oauth2/authorize?client_id={{DISCORDCLIENTID}}&response_type=code&redirect_uri=${encodeURIComponent(window.location.origin + '/gamify-discord')}&scope=guilds+identify`;
+		}
+	</script>
+
+	<div class="background"></div>
+	<div class="particles" id="particles"></div>
+	<div class="header">
+		<label class="switch">
+			<input type="checkbox" id="toggleDone">
+			<span class="slider"></span>
+			<span class="label-text">Show Done</span>
+		</label>
+	</div>
+	<div class="scroll-container">
+		<div class="category-container" id="categories"></div>
+	</div>
+
+	<script>
+		let showDone = false;
+
+		document.getElementById('gamify-css').href = `${window.location.origin}/gamify-css`;
+
+		const container = document.getElementById('particles');
+
+		for (let i = 0; i < 50; i++) {
+			const particle = document.createElement('div');
+			particle.className = 'particle';
+
+			const size = Math.random() * 8 + 6;
+			particle.style.width = `${size}px`;
+			particle.style.height = `${size}px`;
+			particle.style.left = `${Math.random() * 100}vw`;
+			particle.style.top = `${Math.random() * 100}vh`;
+			particle.style.animationDuration = `${10 + Math.random() * 20}s`;
+
+			container.appendChild(particle);
+		}
+
+		let data = [];
+
+		// Get the data from the gamify-data endpoint
+		const params = new URLSearchParams(window.location.search);
+		const gParam = params.get('g') || '';
+		data = fetch(`${window.location.origin}/gamify-data?g=${gParam}`)
+			.then(response => response.json())
+			.then(data => {
+				// Create a new div for each category in the data array
+				data.forEach(category => {
+					const categoryDiv = document.createElement('div');
+					categoryDiv.className = 'category';
+
+					const categoryDivHeader = document.createElement('div');
+					categoryDivHeader.className = 'category-header';
+					categoryDivHeader.classList.add('expanded');
+
+					if (category.percentageDone === '100%') {
+						categoryDivHeader.classList.toggle('collapsed');
+						categoryDivHeader.classList.toggle('expanded');
+					}
+
+					categoryDiv.style.order = category.percentageDone.replace('%', '').replace('None', '100');
+
+					categoryDivHeader.innerHTML = `
+				<h3>${category.name} - ${category.percentageDone}</h3>
+			`;
+
+					categoryDiv.appendChild(categoryDivHeader);
+
+					// Add a click event to collapse/expand the category
+					categoryDivHeader.addEventListener('click', () => {
+						categoryDivHeader.classList.toggle('collapsed');
+						categoryDivHeader.classList.toggle('expanded');
+
+						const tasks = categoryDiv.querySelectorAll('.task');
+						tasks.forEach(task => {
+							if (categoryDivHeader.classList.contains('collapsed')) {
+								task.classList.add('hidden');
+							}
+
+							if (categoryDivHeader.classList.contains('expanded')) {
+								if (task.classList.contains('done') && showDone) {
+									task.classList.remove('hidden');
+								} else if (!task.classList.contains('done')) {
+									task.classList.remove('hidden');
+								}
+							}
+						});
+					});
+
+					// Create a new div for each task in the category
+					category.tasks.forEach(task => {
+						const taskDiv = document.createElement('div');
+						taskDiv.className = 'task';
+
+						if (category.percentageDone === '100%') {
+							taskDiv.classList.add('hidden');
+						}
+
+						if (task.done) {
+							if (!showDone) {
+								taskDiv.classList.add('hidden');
+							}
+
+							taskDiv.classList.add('done');
+							taskDiv.style.order = 2;
+
+							taskDiv.innerHTML = `<p class="taskName taskNameDone">${task.name}</p>`;
+						} else {
+							taskDiv.style.order = 1;
+
+							taskDiv.innerHTML = `<p class="taskName">${task.name}</p>`;
+						}
+
+						// If the task has a dateLastDone, display it
+						if (task.dateLastDone) {
+							const date = new Date(task.dateLastDone);
+							const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+							const timeOptions = { hour: '2-digit', minute: '2-digit' };
+
+							taskDiv.innerHTML += `<p class="lastDone">${date.toLocaleDateString(undefined, options)} at ${date.toLocaleTimeString(undefined, timeOptions)}</p>`;
+						}
+
+						// Add a click event to toggle the task's done status
+						taskDiv.addEventListener('click', () => {
+							task.done = !task.done;
+							taskDiv.classList.toggle('done');
+							taskDiv.style.order = task.done ? 2 : 1;
+
+							const taskNameElement = taskDiv.querySelector('.taskName');
+							taskNameElement.classList.toggle('taskNameDone', task.done);
+
+							// Update the task's done status in the data array
+							const taskIndex = category.tasks.indexOf(task);
+							if (taskIndex > -1) {
+								category.tasks[taskIndex].done = task.done;
+							}
+
+							// Update the category's percentage done
+							let totalTaskWeight = 0;
+							let doneTaskWeight = 0;
+
+							for (let i = 0; i < category.tasks.length; i++) {
+								let task = category.tasks[i];
+
+								let weight = 1;
+
+								if (task.weight) {
+									weight = task.weight;
+								}
+
+								totalTaskWeight += weight;
+								if (task.done) {
+									doneTaskWeight += weight;
+								}
+							}
+
+							category.percentageDone = `${Math.round((doneTaskWeight / totalTaskWeight) * 100)}%`;
+
+							categoryDivHeader.innerHTML = `
+						<h3>${category.name} - ${category.percentageDone}</h3>
+					`;
+
+							// Send the updated data to the server
+							if (task.done) {
+								fetch(`${window.location.origin}/gamify-done?g=${gParam}&t=${task.name}`);
+							} else {
+								fetch(`${window.location.origin}/gamify-open?g=${gParam}&t=${task.name}`);
+							}
+						});
+
+						categoryDiv.appendChild(taskDiv);
+					});
+
+					// Append the category div to the container
+					const categoriesContainer = document.getElementById('categories');
+					categoriesContainer.appendChild(categoryDiv);
+				});
+
+				return data;
+			})
+			.catch(error => {
+				console.error('Error fetching gamify data:', error);
+			});
+
+		const toggleDone = document.getElementById('toggleDone');
+
+		toggleDone.addEventListener('change', () => {
+			showDone = toggleDone.checked;
+			const tasks = document.querySelectorAll('.task');
+			// Show or hide tasks based on the toggle state and their done status
+			tasks.forEach(task => {
+				const isDone = task.classList.contains('done');
+				const taskCategory = task.parentElement.querySelector('.category-header');
+
+				const isExpanded = taskCategory.classList.contains('expanded');
+
+				if (showDone) {
+					if (isExpanded) {
+						if (isDone) {
+							task.classList.remove('hidden');
+						}
+					}
+				} else {
+					if (isExpanded) {
+						if (isDone) {
+							task.classList.add('hidden');
+						}
+					}
+				}
+
+				const container = document.querySelector('.scroll-container');
+				container.offsetHeight; // Trigger reflow
+			});
+		});
+	</script>
+</body>
+
+</html>
