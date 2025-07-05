@@ -16,9 +16,13 @@ module.exports = {
 			res.end(gamifyHtml);
 			return;
 		}
+		
+		let gamifyGuildHtml = fs.readFileSync('./webpages/gamify-guild.html', 'utf8');
+		gamifyGuildHtml = gamifyGuildHtml
+			.replace('{{DISCORDCLIENTID}}', process.env.DISCORDCLIENTID);
 
 		// Send back an html page
 		res.setHeader('Content-Type', 'text/html');
-		res.end(fs.readFileSync('./webpages/gamify-guild.html'));
+		res.end(gamifyGuildHtml);
 	}
 };
