@@ -23,7 +23,7 @@ module.exports = {
 				'client_secret': process.env.DISCORDCLIENTSECRET,
 				'grant_type': 'authorization_code',
 				'code': code,
-				'redirect_uri': 'https://localhost/gamify-discord',
+				'redirect_uri': process.env.REDIRECTURI,
 			}),
 		}).then(res => res.json()).catch(err => {
 			console.error('Error fetching access token:', err);
