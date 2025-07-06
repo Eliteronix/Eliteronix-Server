@@ -175,7 +175,7 @@
 		// Get the player id from the URL
 		const urlParams = new URLSearchParams(window.location.search);
 		const playerId = urlParams.get('u');
-		const fadeOutTime = urlParams.get('f') || 1000 * 60 * 5; // Default to 5 minutes if not provided
+		const fadeOutTime = parseInt(urlParams.get('f')) || 1000 * 60 * 5; // Default to 5 minutes if not provided
 
 		let currentMatchId = null;
 		let currentMatchData = null;

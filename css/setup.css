@@ -28,6 +28,7 @@
 }
 
 body {
+	font-family: 'comfortaa', sans-serif, Arial;
 	background-color: rgb(4, 0, 8);
 	position: absolute;
 	inset: 0;

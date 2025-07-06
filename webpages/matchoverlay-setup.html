@@ -16,7 +16,7 @@
 
 		input {
 			width: 300px;
-			height: 30px;
+			height: 40px;
 			font-size: 20px;
 			text-align: center;
 			background-color: rgb(4, 0, 8);
@@ -28,7 +28,7 @@
 
 		button {
 			width: 100px;
-			height: 30px;
+			height: 29px;
 			font-size: 20px;
 			text-align: center;
 			background-color: rgb(4, 0, 8);
@@ -42,26 +42,75 @@
 
 <body>
 	<script>
+		const styleSheet = `
+  @font-face {
+    font-family: 'comfortaa';
+    src: url('${window.location.origin}/comfortaa-regular');
+  }
+`;
 		document.getElementById('setup-css').href = `${window.location.origin}/setup-css`;
 	</script>
 
 	<div class="gradient"></div>
 	<div class="submission">
-		<input type="text" placeholder="Enter your osu! user ID here">
-		<button>Continue</button>
+		<div class="input-group" style="display: flex; flex-direction: column; align-items: center; height: 130px;">
+			<input type="text" placeholder="Enter your osu! user ID here">
+			<br>
+			<label for="fadeOutTimeSlider" id="fadeOutLabel" style="font-weight: bold;">Fade Out Time: 5 minutes</label>
+			<input type="range" min="-1" max="30" step="1" value="5" id="fadeOutTimeSlider">
+		</div>
+		<div class="button-group" style="height: 130px;">
+			<button>Continue</button>
+		</div>
 	</div>
 
 	<script>
-		document.querySelector('button').addEventListener('click', () => {
+		function redirectToOverlay() {
 			const playerId = document.querySelector('input').value;
-			window.location.href = `${window.location.origin}/matchoverlay?u=${playerId}`;
+			if (!playerId) {
+				alert('Please enter a valid osu! user ID.');
+				return;
+			}
+			if (isNaN(playerId) || playerId <= 0) {
+				alert('Please enter a valid osu! user ID.');
+				return;
+			}
+
+			const fadeOutTime = document.getElementById('fadeOutTimeSlider').value * 60 * 1000; // Convert minutes to milliseconds
+
+			if (fadeOutTime === 0) {
+				fadeOutTime = 1; // Instant fade out
+			}
+
+			window.location.href = `${window.location.origin}/matchoverlay?u=${playerId}&f=${fadeOutTime}`;
+		}
+
+		document.querySelector('button').addEventListener('click', () => {
+			redirectToOverlay();
 		});
 
 		document.querySelector('input').addEventListener('keypress', (e) => {
 			if (e.key === 'Enter') {
-				const playerId = document.querySelector('input').value;
-				window.location.href = `${window.location.origin}/matchoverlay?u=${playerId}`;
+				redirectToOverlay();
 			}
+		});
+
+		const slider = document.getElementById('fadeOutTimeSlider');
+		const label = document.getElementById('fadeOutLabel');
+
+		slider.addEventListener('input', () => {
+			let value = slider.value;
+			if (value === '-1') {
+				value = 'Disabled';
+			} else if (value === '0') {
+				value = 'Instant';
+			} else if (value === '1') {
+				value = '1 minute';
+			} else {
+				value = `${value} minutes`;
+			}
+
+			label.textContent = `Fade Out Time: ${value}`;
 		});
 	</script>
 </body>
