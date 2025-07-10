@@ -87,6 +87,8 @@
 									}
 
 									document.getElementById('qualifierMap').innerText = qualifierMap;
+									document.getElementById('redScore').innerText = '';
+									document.getElementById('blueScore').innerText = '';
 								} else {
 									let extraRound = 0;
 
@@ -114,6 +116,7 @@
 
 									document.getElementById('redScore').innerText = redScore;
 									document.getElementById('blueScore').innerText = blueScore;
+									document.getElementById('qualifierMap').innerText = '';
 								}
 
 								if (currentMatchData.currentMapsetId) {
