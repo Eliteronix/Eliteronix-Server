@@ -40,6 +40,11 @@ module.exports = {
 
 			let latestEventId = json.latest_event_id - 1;
 
+			if (!json.events || json.events.length === 0) {
+				console.log(`No events found for match ${matchId}`);
+				console.log(json);
+			}
+
 			while (json.first_event_id !== json.events[0].id) {
 				await getNewOsuAPIv2TokenIfNecessary();
 
