@@ -3,6 +3,17 @@
 
 <head>
 	<title>Elitebotix Bingo</title>
+
+	<style>
+		body {
+			transition: opacity 3s ease;
+			opacity: 1;
+		}
+
+		.fade-out {
+			opacity: 0;
+		}
+	</style>
 </head>
 
 <body>
@@ -15,6 +26,13 @@
 				.then(response => response.json())
 				.then(data => {
 					currentBingo = data;
+
+					// Fade out after 15 minutes if the bingo board has not been updated
+					if (fadeOutTime > 0 && Date.now() - currentBingo.lastModified > fadeOutTime) {
+						document.body.classList.add('fade-out');
+					} else {
+						document.body.classList.remove('fade-out');
+					}
 
 					document.getElementById('bingocard').src = `${window.location.origin}/bingocard?b=${currentBingo.message}&cache=${Date.now()}`;
 
@@ -33,6 +51,7 @@
 		// Get the player id from the URL
 		const urlParams = new URLSearchParams(window.location.search);
 		const playerId = urlParams.get('u');
+		const fadeOutTime = parseInt(urlParams.get('f')) || 1000 * 60 * 5; // Default to 5 minutes if not provided
 
 		let currentBingo = getCurrentBingoGame();
 

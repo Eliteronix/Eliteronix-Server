@@ -170,7 +170,11 @@
 						if (matchFinishedTime.getTime() + fadeOutTime < Date.now()) {
 							// Add the fade-out class to the body
 							document.body.classList.add('fade-out');
+						} else {
+							document.body.classList.remove('fade-out');
 						}
+					} else {
+						document.body.classList.remove('fade-out');
 					}
 				});
 		}
