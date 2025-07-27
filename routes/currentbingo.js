@@ -18,8 +18,18 @@ module.exports = {
 			return;
 		}
 
+		let bingoJson = fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/currentbingo/${playerId}.json`, 'utf8');
+
+		bingoJson = JSON.parse(bingoJson);
+
+		if (fs.existsSync(`${process.env.ELITEBOTIXROOTPATH}/bingocards/${bingoJson.message}.png`)) {
+			bingoJson.lastModified = fs.statSync(`${process.env.ELITEBOTIXROOTPATH}/bingocards/${bingoJson.message}.png`).mtimeMs;
+		} else {
+			bingoJson.lastModified = Date.now();
+		}
+
 		// Send the json from the currentbingo folder
 		res.setHeader('Content-Type', 'application/json');
-		res.end(fs.readFileSync(`${process.env.ELITEBOTIXROOTPATH}/currentbingo/${playerId}.json`));
+		res.end(JSON.stringify(bingoJson));
 	}
 };
