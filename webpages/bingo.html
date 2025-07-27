@@ -22,7 +22,7 @@
 					document.getElementById('bingocard').style.width = '500px';
 					document.getElementById('bingocard').style.height = '500px';
 
-					if (currentBingo.message) {
+					if (currentBingo.team) {
 						document.getElementById('bingocard').style.border = `10px solid ${currentBingo.team.replace('Team ', '').toLowerCase()}`;
 					} else {
 						document.getElementById('bingocard').style.border = '10px solid black';
