@@ -30,6 +30,7 @@
 					// Fade out after 15 minutes if the bingo board has not been updated
 					if (fadeOutTime > 0 && Date.now() - currentBingo.lastModified > fadeOutTime) {
 						document.body.classList.add('fade-out');
+						currentBingo.team = null;
 					} else {
 						document.body.classList.remove('fade-out');
 					}
