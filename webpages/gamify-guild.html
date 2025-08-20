@@ -83,6 +83,10 @@
 			.then(data => {
 				// Create a new div for each category in the data array
 				data.forEach(category => {
+					if (category.tasks.length === 0) {
+						return; // Skip categories with no tasks
+					}
+
 					const categoryDiv = document.createElement('div');
 					categoryDiv.className = 'category';
 
