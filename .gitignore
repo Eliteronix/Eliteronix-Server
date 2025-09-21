@@ -4,3 +4,4 @@ node_modules
 greenlock.d
 localcert/localhost.crt
 localcert/localhost.key
+greenlock.d/config.json.bak
