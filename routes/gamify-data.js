@@ -88,7 +88,7 @@ module.exports = {
 				peopleToRemind: t.peopleToRemind,
 				streakStartDate: t.streakStartDate,
 				streakEndDate: t.streakEndDate,
-				streak: streak
+				streak: t.streak
 			};
 		});
 
