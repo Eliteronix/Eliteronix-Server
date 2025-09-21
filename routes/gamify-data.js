@@ -14,7 +14,9 @@ module.exports = {
 		let categories = await DBGamifyCategories.findAll({
 			attributes: [
 				'id',
-				'name'
+				'name',
+				'streakStartDate',
+				'streakEndDate'
 			],
 			where: {
 				guildId: guildId
@@ -48,7 +50,10 @@ module.exports = {
 				'resetEveryDays',
 				'dateOfLastReminder',
 				'remindEveryHours',
-				'peopleToRemind'
+				'peopleToRemind',
+				'streakStartDate',
+				'streakEndDate',
+				'streak'
 			],
 			where: {
 				guildId: guildId
