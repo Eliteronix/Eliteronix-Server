@@ -32,7 +32,9 @@ module.exports = {
 		categories = categories.map(c => {
 			return {
 				id: c.id,
-				name: c.name
+				name: c.name,
+				streakStartDate: c.streakStartDate,
+				streakEndDate: c.streakEndDate
 			};
 		});
 
@@ -83,7 +85,10 @@ module.exports = {
 				resetEveryDays: t.resetEveryDays,
 				dateOfLastReminder: t.dateOfLastReminder,
 				remindEveryHours: t.remindEveryHours,
-				peopleToRemind: t.peopleToRemind
+				peopleToRemind: t.peopleToRemind,
+				streakStartDate: t.streakStartDate,
+				streakEndDate: t.streakEndDate,
+				streak: streak
 			};
 		});
 
