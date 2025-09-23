@@ -2,6 +2,7 @@
 <html>
 
 <head>
+	<meta charset="UTF-8">
 	<title>Gamify</title>
 	<link rel="stylesheet" type="text/css" id="gamify-css">
 	<link rel="icon" href="https://www.eliteronix.de/asset?a=gamify.png" type="image/png">
@@ -101,8 +102,20 @@
 
 					categoryDiv.style.order = category.percentageDone.replace('%', '').replace('None', '100');
 
+					let streakText = '';
+
+					if (category.streakStartDate) {
+						let streakDifference = new Date().getTime() - new Date(category.streakStartDate).getTime();
+
+						let dayStreak = Math.floor(streakDifference / 86400000);
+
+						if (dayStreak > 1) {
+							streakText = `${dayStreak}x🔥 `;
+						}
+					}
+
 					categoryDivHeader.innerHTML = `
-				<h3>${category.name} - ${category.percentageDone}</h3>
+				<h3>${streakText}${category.name} - ${category.percentageDone}</h3>
 			`;
 
 					categoryDiv.appendChild(categoryDivHeader);
@@ -137,6 +150,12 @@
 							taskDiv.classList.add('hidden');
 						}
 
+						let streakText = '';
+
+						if (task.streak > 1) {
+							streakText = `${task.streak}x🔥 `;
+						}
+
 						if (task.done) {
 							if (!showDone) {
 								taskDiv.classList.add('hidden');
@@ -145,11 +164,11 @@
 							taskDiv.classList.add('done');
 							taskDiv.style.order = 2;
 
-							taskDiv.innerHTML = `<p class="taskName taskNameDone">${task.name}</p>`;
+							taskDiv.innerHTML = `<p class="taskName taskNameDone">${streakText}${task.name}</p>`;
 						} else {
 							taskDiv.style.order = 1;
 
-							taskDiv.innerHTML = `<p class="taskName">${task.name}</p>`;
+							taskDiv.innerHTML = `<p class="taskName">${streakText}${task.name}</p>`;
 						}
 
 						// If the task has a dateLastDone, display it
@@ -197,8 +216,20 @@
 
 							category.percentageDone = `${Math.round((doneTaskWeight / totalTaskWeight) * 100)}%`;
 
+							let streakText = '';
+
+							if (category.streakStartDate) {
+								let streakDifference = new Date().getTime() - new Date(category.streakStartDate).getTime();
+
+								let dayStreak = Math.floor(streakDifference / 86400000);
+
+								if (dayStreak > 1) {
+									streakText = `${dayStreak}x🔥 `;
+								}
+							}
+
 							categoryDivHeader.innerHTML = `
-						<h3>${category.name} - ${category.percentageDone}</h3>
+						<h3>${streakText}${category.name} - ${category.percentageDone}</h3>
 					`;
 
 							// Send the updated data to the server
