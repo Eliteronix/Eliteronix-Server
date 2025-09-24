@@ -115,7 +115,7 @@
 					}
 
 					categoryDivHeader.innerHTML = `
-				<h3>${streakText}${category.name} - ${category.percentageDone}</h3>
+				<h3><span style="color:orange;">${streakText}</span>${category.name} - ${category.percentageDone}</h3>
 			`;
 
 					categoryDiv.appendChild(categoryDivHeader);
@@ -164,11 +164,11 @@
 							taskDiv.classList.add('done');
 							taskDiv.style.order = 2;
 
-							taskDiv.innerHTML = `<p class="taskName taskNameDone">${streakText}${task.name}</p>`;
+							taskDiv.innerHTML = `<p class="taskName taskNameDone"><span style="color:orange;">${streakText}</span>${task.name}</p>`;
 						} else {
 							taskDiv.style.order = 1;
 
-							taskDiv.innerHTML = `<p class="taskName">${streakText}${task.name}</p>`;
+							taskDiv.innerHTML = `<p class="taskName"><span style="color:orange;">${streakText}</span>${task.name}</p>`;
 						}
 
 						// If the task has a dateLastDone, display it
@@ -229,7 +229,7 @@
 							}
 
 							categoryDivHeader.innerHTML = `
-						<h3>${streakText}${category.name} - ${category.percentageDone}</h3>
+						<h3><span style="color:orange;">${streakText}</span>${category.name} - ${category.percentageDone}</h3>
 					`;
 
 							// Send the updated data to the server
