@@ -264,14 +264,13 @@ input:checked+.slider::before {
 
 .pulsing-border {
 	padding: 1rem 2rem;
-	border: 2px solid red;
 	border-radius: 8px;
 	animation: borderPulse 2s ease-in-out infinite;
 }
 
 @keyframes borderPulse {
 	0% {
-		box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+		box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
 	}
 
 	70% {
