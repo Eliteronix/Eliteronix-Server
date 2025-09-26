@@ -263,8 +263,8 @@ input:checked+.slider::before {
 }
 
 .pulsing-border {
-	padding: 1rem 2rem;
-	border-radius: 8px;
+	/* padding: 1rem 2rem;
+	border-radius: 8px; */
 	animation: borderPulse 2s ease-in-out infinite;
 }
 
