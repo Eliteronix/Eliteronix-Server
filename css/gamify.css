@@ -261,3 +261,30 @@ input:checked+.slider::before {
 	transform: scale(1.1);
 	transition: transform 0.3s ease;
 }
+
+.pulsing-border {
+	padding: 1rem 2rem;
+	border: 2px solid red;
+	border-radius: 8px;
+	animation: borderPulse 2s ease-in-out infinite;
+}
+
+@keyframes borderPulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+	}
+
+	70% {
+		box-shadow: 0 0 0 15px rgba(255, 0, 0, 0);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pulsing-border {
+		animation: none;
+	}
+}

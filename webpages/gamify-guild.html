@@ -114,6 +114,13 @@
 						}
 					}
 
+					let tomorrow = new Date();
+					tomorrow.setDate(tomorrow.getDate() + 1);
+
+					if (category.streakEndDate && new Date(category.streakEndDate) < tomorrow) {
+						categoryDivHeader.classList.add('pulsing-border')
+					}
+
 					categoryDivHeader.innerHTML = `
 				<h3><span style="color:orange;">${streakText}</span>${category.name} - ${category.percentageDone}</h3>
 			`;
@@ -154,6 +161,13 @@
 
 						if (task.streak > 1) {
 							streakText = `${task.streak}🔥 `;
+						}
+
+						let tomorrow = new Date();
+						tomorrow.setDate(tomorrow.getDate() + 1);
+
+						if (task.streakEndDate && new Date(task.streakEndDate) < tomorrow) {
+							categoryDivHeader.classList.add('pulsing-border')
 						}
 
 						if (task.done) {
