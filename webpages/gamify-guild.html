@@ -167,7 +167,7 @@
 						tomorrow.setDate(tomorrow.getDate() + 1);
 
 						if (task.streakEndDate && new Date(task.streakEndDate) < tomorrow) {
-							categoryDivHeader.classList.add('pulsing-border')
+							taskDiv.classList.add('pulsing-border')
 						}
 
 						if (task.done) {
