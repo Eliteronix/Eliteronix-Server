@@ -1,12 +1,13 @@
 const fs = require('fs');
 
 module.exports = {
-	async execute(req, res, args) {
-		const osuUserId = args[0];
+	async execute(req, res) {
+		const urlParams = new URLSearchParams(req.url.split('?')[1]);
+		const osuUserId = urlParams.get('u');
 
-		if (isNaN(osuUserId)) {
+		if (!osuUserId || isNaN(osuUserId)) {
 			res.setHeader('Content-Type', 'text/plain');
-			res.end('Invalid osu! user id');
+			res.end('Invalid osu! user id | u parameter must be a number');
 			return;
 		}
 

@@ -1,12 +1,13 @@
 const fs = require('fs');
 
 module.exports = {
-	async execute(req, res, args) {
-		const mappackId = args[0];
+	async execute(req, res) {
+		const urlParams = new URLSearchParams(req.url.split('?')[1]);
+		const mappackId = urlParams.get('m');
 
 		if (!mappackId) {
 			res.setHeader('Content-Type', 'text/plain');
-			res.end('Invalid mappack id');
+			res.end('Invalid mappack id | m parameter must be a given');
 			return;
 		}
 

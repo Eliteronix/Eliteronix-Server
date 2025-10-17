@@ -1,12 +1,13 @@
 const fs = require('fs');
 
 module.exports = {
-	async execute(req, res, args) {
-		const mod = args[0];
+	async execute(req, res) {
+		const urlParams = new URLSearchParams(req.url.split('?')[1]);
+		const mod = urlParams.get('m');
 
 		if (!mod) {
 			res.setHeader('Content-Type', 'text/plain');
-			res.end('Invalid mod');
+			res.end('Invalid mod | m parameter must be given');
 			return;
 		}
 

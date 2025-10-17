@@ -1,20 +1,20 @@
 const fs = require('fs');
 
 module.exports = {
-	async execute(req, res, args) {
-		const year = args[0];
+	async execute(req, res) {
+		const urlParams = new URLSearchParams(req.url.split('?')[1]);
+		const year = urlParams.get('y');
+		const osuUserId = urlParams.get('u');
 
-		if (isNaN(year)) {
+		if (!year || isNaN(year)) {
 			res.setHeader('Content-Type', 'text/plain');
-			res.end('Invalid year');
+			res.end('Invalid osu! user id | y parameter must be a number');
 			return;
 		}
 
-		const osuUserId = args[1];
-
-		if (isNaN(osuUserId)) {
+		if (!osuUserId || isNaN(osuUserId)) {
 			res.setHeader('Content-Type', 'text/plain');
-			res.end('Invalid osu! user id');
+			res.end('Invalid osu! user id | u parameter must be a number');
 			return;
 		}
 

@@ -7,12 +7,10 @@ const requestHandler = async (req, res) => {
 	// Retrieve route from request object
 	const route = url.parse(req.url).pathname;
 
-	let args = route.substring(1).split('/');
-
 	try {
-		let endpoint = require(`./routes/${args.shift()}.js`);
+		let endpoint = require(`./routes/${route}.js`);
 
-		endpoint.execute(req, res, args).catch((e) => {
+		endpoint.execute(req, res).catch((e) => {
 			console.error(e);
 
 			// If an error occurs, return a 500
