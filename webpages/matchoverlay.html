@@ -156,7 +156,7 @@
 								if (currentMatchData.currentMapMods) {
 									currentMatchData.currentMapMods.forEach(mod => {
 										const modImage = document.createElement('img');
-										modImage.src = `${window.location.origin}/modimage/${mod}`;
+										modImage.src = `${window.location.origin}/modimage?m=${mod}`;
 										modImage.alt = mod;
 										modImage.className = 'mod-image';
 										document.querySelector('.mods').appendChild(modImage);
