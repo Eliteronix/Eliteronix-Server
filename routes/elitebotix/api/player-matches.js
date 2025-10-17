@@ -11,10 +11,17 @@ module.exports = {
 			return;
 		}
 
+		let tourneyMatch = true;
+
+		if (urlParams.get('tourney') && urlParams.get('tourney') === '0') {
+			tourneyMatch = false;
+		}
+
 		let playerMatches = await DBOsuMultiGameScores.findAll({
 			attributes: ['matchId'],
 			where: {
-				osuUserId: osuUserId
+				osuUserId: osuUserId,
+				tourneyMatch: tourneyMatch
 			},
 			group: ['matchId'],
 			order: [['matchId', 'ASC']]
@@ -24,6 +31,7 @@ module.exports = {
 
 		let response = {
 			osuUserId: osuUserId,
+			tourneyMatch: tourneyMatch,
 			matchIds: matchIds
 		};
 
