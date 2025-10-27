@@ -302,6 +302,7 @@
 		const REFRESH_AFTER = 30 * 60 * 1000; // 30 minutes in ms
 		let lastActiveTime = Date.now();
 		let lastBlurTime = null;
+		let blurTimeout;
 
 		function resetActivityTimer() {
 			lastActiveTime = Date.now();
@@ -314,14 +315,17 @@
 
 		// Track when the tab/window loses focus
 		window.addEventListener('blur', () => {
-			lastBlurTime = Date.now();
-			console.log('Window blurred at', new Date(lastBlurTime).toLocaleTimeString());
+			// Wait a bit to confirm it's a real blur, not a focus flicker
+			blurTimeout = setTimeout(() => {
+				lastRealBlurTime = Date.now();
+			}, 300);
 		});
 
 		// Check when the user comes back
 		window.addEventListener('focus', () => {
+			clearTimeout(blurTimeout);
+
 			const now = Date.now();
-			console.log('Window focused at', new Date(now).toLocaleTimeString());
 			const awayTooLong = lastBlurTime && now - lastBlurTime > REFRESH_AFTER;
 			const inactiveTooLong = now - lastActiveTime > REFRESH_AFTER;
 
