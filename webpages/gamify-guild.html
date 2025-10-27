@@ -298,6 +298,42 @@
 				container.offsetHeight; // Trigger reflow
 			});
 		});
+
+		const REFRESH_AFTER = 30 * 60 * 1000; // 30 minutes in ms
+		let lastActiveTime = Date.now();
+		let lastBlurTime = null;
+
+		function resetActivityTimer() {
+			lastActiveTime = Date.now();
+		}
+
+		// Track any user activity
+		['mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt =>
+			window.addEventListener(evt, resetActivityTimer, { passive: true })
+		);
+
+		// Track when the tab/window loses focus
+		window.addEventListener('blur', () => {
+			lastBlurTime = Date.now();
+		});
+
+		// Check when the user comes back
+		window.addEventListener('focus', () => {
+			const now = Date.now();
+			const awayTooLong = lastBlurTime && now - lastBlurTime > REFRESH_AFTER;
+			const inactiveTooLong = now - lastActiveTime > REFRESH_AFTER;
+
+			if (awayTooLong || inactiveTooLong) {
+				location.reload();
+			}
+		});
+
+		// background timer to auto-refresh even if focus never changes
+		setInterval(() => {
+			if (Date.now() - lastActiveTime > REFRESH_AFTER) {
+				location.reload();
+			}
+		}, 60 * 1000); // Check every minute
 	</script>
 </body>
 
