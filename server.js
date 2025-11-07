@@ -15,6 +15,10 @@ const requestHandler = async (req, res) => {
 			return proxyToGrafana(req, res);
 		}
 
+		if (req.url.startsWith('/prometheus')) {
+			return proxyToPrometheus(req, res);
+		}
+
 		let endpoint = require(`./routes/${route}.js`);
 
 		endpoint.execute(req, res).catch((e) => {
@@ -101,6 +105,31 @@ function proxyToGrafana(req, res) {
 	proxyReq.on('error', err => {
 		res.writeHead(502);
 		res.end(`Grafana proxy error: ${err.message}`);
+	});
+
+	req.pipe(proxyReq, { end: true });
+}
+
+function proxyToPrometheus(req, res) {
+	const url = req.url.replace(/^\/prometheus/, ''); // remove /prometheus prefix
+
+	const proxyReq = http.request({
+		hostname: 'localhost',
+		port: 9090,
+		path: url,
+		method: req.method,
+		headers: {
+			...req.headers,
+			host: 'localhost:9090',
+		},
+	}, proxyRes => {
+		res.writeHead(proxyRes.statusCode, proxyRes.headers);
+		proxyRes.pipe(res, { end: true });
+	});
+
+	proxyReq.on('error', err => {
+		res.writeHead(502);
+		res.end(`Prometheus proxy error: ${err.message}`);
 	});
 
 	req.pipe(proxyReq, { end: true });
