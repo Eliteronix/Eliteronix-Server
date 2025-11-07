@@ -20,6 +20,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "greenlock-express": "^4.0.3",
+    "http-proxy-middleware": "^3.0.5",
     "node-fetch": "^3.3.2",
     "node-osu": "^2.2.1",
     "sequelize": "^6.37.3",
