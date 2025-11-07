@@ -113,15 +113,17 @@ function proxyToGrafana(req, res) {
 function proxyToPrometheus(req, res) {
 	const url = req.url.replace(/^\/prometheus/, ''); // remove /prometheus prefix
 
+	// Clone headers but remove Origin and Referer
+	const headers = { ...req.headers };
+	delete headers.origin;
+	delete headers.referer;
+
 	const proxyReq = http.request({
 		hostname: 'localhost',
 		port: 9090,
 		path: url,
 		method: req.method,
-		headers: {
-			...req.headers,
-			host: 'localhost:9090',
-		},
+		headers,
 	}, proxyRes => {
 		res.writeHead(proxyRes.statusCode, proxyRes.headers);
 		proxyRes.pipe(res, { end: true });
