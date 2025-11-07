@@ -1,4 +1,7 @@
 const url = require('url');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
 require('dotenv').config();
 const Greenlock = require('greenlock-express');
 
@@ -8,6 +11,10 @@ const requestHandler = async (req, res) => {
 	const route = url.parse(req.url).pathname;
 
 	try {
+		if (req.url.startsWith('/grafana')) {
+			return proxyToGrafana(req, res);
+		}
+
 		let endpoint = require(`./routes/${route}.js`);
 
 		endpoint.execute(req, res).catch((e) => {
@@ -36,16 +43,6 @@ if (returnBoolean(process.env.STAGING)) {
 	// eslint-disable-next-line no-console
 	console.log('Running in staging mode without greenlock');
 
-	// Start the HTTP server which exposes the browsersources on http://localhost:80/duelRating/1234
-	// const http = require('http');
-	// const browserSourceServer = http.createServer(requestHandler);
-	// browserSourceServer.listen(80, () => {
-	// 	console.log('HTTP server running on http://localhost:80');
-	// });
-
-	// Uncomment the following lines to start an HTTPS server with self-signed certificates
-	const https = require('https');
-	const fs = require('fs');
 	const options = {
 		key: fs.readFileSync('localcert/localhost.key'),
 		cert: fs.readFileSync('localcert/localhost.crt'),
@@ -79,4 +76,32 @@ function returnBoolean(value) {
 	if (value === 'false') return false;
 	if (value === 'true') return true;
 	return value;
+}
+
+function proxyToGrafana(req, res) {
+	const url = new URL(req.url.replace(/^\/grafana/, '') || '/', 'http://localhost:3000');
+
+	const proxyReq = http.request(
+		{
+			hostname: 'localhost',
+			port: 3000,
+			path: url.pathname + url.search,
+			method: req.method,
+			headers: {
+				...req.headers,
+				host: 'localhost:3000',
+			},
+		},
+		proxyRes => {
+			res.writeHead(proxyRes.statusCode, proxyRes.headers);
+			proxyRes.pipe(res, { end: true });
+		}
+	);
+
+	proxyReq.on('error', err => {
+		res.writeHead(502);
+		res.end(`Grafana proxy error: ${err.message}`);
+	});
+
+	req.pipe(proxyReq, { end: true });
 }
