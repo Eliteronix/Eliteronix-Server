@@ -11,7 +11,11 @@ const requestHandler = async (req, res) => {
 	const route = url.parse(req.url).pathname;
 
 	try {
-		if (req.url.startsWith('/prometheus') || req.url.startsWith('/grafana/prometheus')) {
+		if (req.url.startsWith('/grafana/prometheus')) {
+			return proxyToPrometheus(req, res);
+		}
+
+		if (req.url.startsWith('/prometheus')) {
 			return proxyToPrometheus(req, res);
 		}
 
@@ -111,15 +115,16 @@ function proxyToGrafana(req, res) {
 }
 
 function proxyToPrometheus(req, res) {
-	// Remove either /prometheus or /grafana/prometheus prefix
 	let urlPath = req.url;
+
+	// Strip the correct prefix
 	if (urlPath.startsWith('/grafana/prometheus')) {
 		urlPath = urlPath.replace('/grafana/prometheus', '') || '/';
 	} else if (urlPath.startsWith('/prometheus')) {
 		urlPath = urlPath.replace('/prometheus', '') || '/';
 	}
 
-	// Clone headers but remove Origin and Referer
+	// Remove headers that can trigger 403
 	const headers = { ...req.headers };
 	delete headers.origin;
 	delete headers.referer;
