@@ -11,12 +11,12 @@ const requestHandler = async (req, res) => {
 	const route = url.parse(req.url).pathname;
 
 	try {
-		if (req.url.startsWith('/grafana')) {
-			return proxyToGrafana(req, res);
+		if (req.url.startsWith('/prometheus') || req.url.startsWith('/grafana/prometheus')) {
+			return proxyToPrometheus(req, res);
 		}
 
-		if (req.url.startsWith('/prometheus')) {
-			return proxyToPrometheus(req, res);
+		if (req.url.startsWith('/grafana')) {
+			return proxyToGrafana(req, res);
 		}
 
 		let endpoint = require(`./routes/${route}.js`);
