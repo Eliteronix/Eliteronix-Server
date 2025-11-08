@@ -111,7 +111,13 @@ function proxyToGrafana(req, res) {
 }
 
 function proxyToPrometheus(req, res) {
-	const url = req.url.replace(/^\/prometheus/, ''); // remove /prometheus prefix
+	// Remove either /prometheus or /grafana/prometheus prefix
+	let urlPath = req.url;
+	if (urlPath.startsWith('/grafana/prometheus')) {
+		urlPath = urlPath.replace('/grafana/prometheus', '') || '/';
+	} else if (urlPath.startsWith('/prometheus')) {
+		urlPath = urlPath.replace('/prometheus', '') || '/';
+	}
 
 	// Clone headers but remove Origin and Referer
 	const headers = { ...req.headers };
@@ -121,7 +127,7 @@ function proxyToPrometheus(req, res) {
 	const proxyReq = http.request({
 		hostname: 'localhost',
 		port: 9090,
-		path: url,
+		path: urlPath,
 		method: req.method,
 		headers,
 	}, proxyRes => {
