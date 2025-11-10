@@ -11,14 +11,6 @@ const requestHandler = async (req, res) => {
 	const route = url.parse(req.url).pathname;
 
 	try {
-		if (req.url.startsWith('/grafana/prometheus')) {
-			return proxyToPrometheus(req, res);
-		}
-
-		if (req.url.startsWith('/prometheus')) {
-			return proxyToPrometheus(req, res);
-		}
-
 		if (req.url.startsWith('/grafana')) {
 			return proxyToGrafana(req, res);
 		}
@@ -87,17 +79,16 @@ function returnBoolean(value) {
 }
 
 function proxyToGrafana(req, res) {
-	const url = new URL(req.url.replace(/^\/grafana/, '') || '/', 'http://localhost:3000');
-
 	const proxyReq = http.request(
 		{
 			hostname: 'localhost',
 			port: 3000,
-			path: url.pathname + url.search,
+			path: req.url, // forward the full /grafana/... path
 			method: req.method,
 			headers: {
 				...req.headers,
-				host: 'localhost:3000',
+				host: 'www.eliteronix.de',                  // match public domain
+				origin: 'https://www.eliteronix.de/grafana' // match root_url
 			},
 		},
 		proxyRes => {
@@ -109,40 +100,6 @@ function proxyToGrafana(req, res) {
 	proxyReq.on('error', err => {
 		res.writeHead(502);
 		res.end(`Grafana proxy error: ${err.message}`);
-	});
-
-	req.pipe(proxyReq, { end: true });
-}
-
-function proxyToPrometheus(req, res) {
-	let urlPath = req.url;
-
-	// Strip the correct prefix
-	if (urlPath.startsWith('/grafana/prometheus')) {
-		urlPath = urlPath.replace('/grafana/prometheus', '') || '/';
-	} else if (urlPath.startsWith('/prometheus')) {
-		urlPath = urlPath.replace('/prometheus', '') || '/';
-	}
-
-	// Remove headers that can trigger 403
-	const headers = { ...req.headers };
-	delete headers.origin;
-	delete headers.referer;
-
-	const proxyReq = http.request({
-		hostname: 'localhost',
-		port: 9090,
-		path: urlPath,
-		method: req.method,
-		headers,
-	}, proxyRes => {
-		res.writeHead(proxyRes.statusCode, proxyRes.headers);
-		proxyRes.pipe(res, { end: true });
-	});
-
-	proxyReq.on('error', err => {
-		res.writeHead(502);
-		res.end(`Prometheus proxy error: ${err.message}`);
 	});
 
 	req.pipe(proxyReq, { end: true });
