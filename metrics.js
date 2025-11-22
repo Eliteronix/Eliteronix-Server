@@ -18,19 +18,19 @@ const osuApiRequests = new client.Counter({
 });
 register.registerMetric(osuApiRequests);
 
-const gamifyProcessQueueAccesses = new client.Gauge({
+const gamifyProcessQueueAccesses = new client.Counter({
 	name: 'database_gamify_processQueue',
 	help: 'Database gamify-processQueue accessed',
 });
 register.registerMetric(gamifyProcessQueueAccesses);
 
-const multiGameScoresAccesses = new client.Gauge({
+const multiGameScoresAccesses = new client.Counter({
 	name: 'database_multiGameScores',
 	help: 'Database multiGameScores accessed',
 });
 register.registerMetric(multiGameScoresAccesses);
 
-const mainDataAccesses = new client.Gauge({
+const mainDataAccesses = new client.Counter({
 	name: 'database_mainData',
 	help: 'Database mainData accessed',
 });
