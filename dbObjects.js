@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { multiGameScoresAccesses, gamifyProcessQueueAccesses, mainDataAccesses } = require('../metrics');
+const { multiGameScoresAccesses, gamifyProcessQueueAccesses, mainDataAccesses } = require('./metrics');
 
 const multiGameScores = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
