@@ -1,9 +1,12 @@
 const Sequelize = require('sequelize');
+const { multiGameScoresAccesses, gamifyProcessQueueAccesses, mainDataAccesses } = require('../metrics');
 
 const multiGameScores = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
-	logging: false,
+	logging: async () => {
+		multiGameScoresAccesses.inc();
+	},
 	storage: `${process.env.ELITEBOTIXROOTPATH}/databases/multiGameScores.sqlite`,
 	retry: {
 		max: 25, // Maximum retry 15 times
@@ -18,7 +21,9 @@ const multiGameScores = new Sequelize('database', 'username', 'password', {
 const gamifyProcessQueue = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
-	logging: false,
+	logging: async () => {
+		gamifyProcessQueueAccesses.inc();
+	},
 	storage: `${process.env.GAMIFYROOTPATH}/databases/processQueue.sqlite`,
 	retry: {
 		max: 25, // Maximum retry 15 times
@@ -33,7 +38,9 @@ const gamifyProcessQueue = new Sequelize('database', 'username', 'password', {
 const gamifyMainData = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
-	logging: false,
+	logging: async () => {
+		mainDataAccesses.inc();
+	},
 	storage: `${process.env.GAMIFYROOTPATH}/databases/mainData.sqlite`,
 	retry: {
 		max: 25, // Maximum retry 15 times

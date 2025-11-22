@@ -1,5 +1,6 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const osu = require('node-osu');
+const { osuApiRequests } = require('../metrics');
 
 let osuv2_access_token = null;
 let playerNames;
@@ -341,6 +342,7 @@ async function getOsuPlayerName(osuUserId) {
 		parseNumeric: false // Parse numeric values into numbers/floats, excluding ids
 	});
 
+	osuApiRequests.inc();
 	const osuUser = await osuApi.getUser({ u: osuUserId });
 	if (osuUser) {
 		if (!playerNames) {

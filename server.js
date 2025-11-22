@@ -5,6 +5,23 @@ const fs = require('fs');
 require('dotenv').config();
 const Greenlock = require('greenlock-express');
 
+const { register } = require('./metrics.js');
+
+// Define the HTTP server
+const server = http.createServer(async (req, res) => {
+	// Retrieve route from request object
+	const route = url.parse(req.url).pathname;
+
+	if (route === '/metrics') {
+		// Return all metrics the Prometheus exposition format
+		res.setHeader('Content-Type', register.contentType);
+		res.end(await register.metrics());
+	}
+});
+
+// Start the HTTP server which exposes the metrics on http://localhost:8083/metrics
+server.listen(8083);
+
 // Define the HTTP server
 const requestHandler = async (req, res) => {
 	// Retrieve route from request object
