@@ -2,6 +2,15 @@ const url = require('url');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+
+const originalConsoleError = console.error;
+const { totalErrorCount } = require('./metrics.js');
+
+console.error = function (...args) {
+	totalErrorCount.inc();
+	originalConsoleError.apply(console, args);
+};
+
 require('dotenv').config();
 const Greenlock = require('greenlock-express');
 

@@ -36,6 +36,12 @@ const mainDataAccesses = new client.Counter({
 });
 register.registerMetric(mainDataAccesses);
 
+const totalErrorCount = new client.Counter({
+	name: 'total_errors_count',
+	help: 'Total error count',
+});
+register.registerMetric(totalErrorCount);
+
 // Export everything you need
 module.exports = {
 	client,
@@ -44,4 +50,5 @@ module.exports = {
 	gamifyProcessQueueAccesses,
 	multiGameScoresAccesses,
 	mainDataAccesses,
+	totalErrorCount,
 };
