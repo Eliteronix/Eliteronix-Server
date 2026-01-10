@@ -185,13 +185,54 @@
 							taskDiv.innerHTML = `<p class="taskName"><span style="color:orange;">${streakText}</span>${task.name}</p>`;
 						}
 
+						// Add a div with streak and last done info
+						const infoDiv = document.createElement('div');
+						infoDiv.className = 'task-info';
+						// add style display flex with space between
+						infoDiv.style.display = 'flex';
+						infoDiv.style.justifyContent = 'space-between';
+
+						taskDiv.appendChild(infoDiv);
+
+						// If the task's streak is gonna end within 24 hours show the countdown
+						if (task.streakEndDate) {
+							const endDate = new Date(task.streakEndDate);
+							const now = new Date();
+							const timeDiff = endDate - now;
+
+							if (timeDiff > 0 && timeDiff <= 24 * 60 * 60 * 1000) {
+								const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+								const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+								const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+								infoDiv.innerHTML += `<p class="streakEndingSoon">Streak ends in ${hours}h ${minutes}m ${seconds}s</p>`;
+
+								// Update the countdown every second
+								setInterval(() => {
+									const now = new Date();
+									const timeDiff = endDate - now;
+
+									if (timeDiff > 0) {
+										const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+										const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+										const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+										const streakEndingSoonElem = infoDiv.querySelector('.streakEndingSoon');
+										if (streakEndingSoonElem) {
+											streakEndingSoonElem.textContent = `Streak ends in ${hours}h ${minutes}m ${seconds}s`;
+										}
+									}
+								}, 1000);
+							}
+						}
+
 						// If the task has a dateLastDone, display it
 						if (task.dateLastDone) {
 							const date = new Date(task.dateLastDone);
 							const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
 							const timeOptions = { hour: '2-digit', minute: '2-digit' };
 
-							taskDiv.innerHTML += `<p class="lastDone">${date.toLocaleDateString(undefined, options)} at ${date.toLocaleTimeString(undefined, timeOptions)}</p>`;
+							infoDiv.innerHTML += `<p class="lastDone">last: ${date.toLocaleDateString(undefined, options)} at ${date.toLocaleTimeString(undefined, timeOptions)}</p>`;
 						}
 
 						// Add a click event to toggle the task's done status
