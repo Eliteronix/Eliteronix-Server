@@ -135,18 +135,32 @@ body {
 	color: #ccc;
 }
 
+.streakEndingSoon {
+	color: #ff4d4d;
+	font-weight: bold;
+}
+
 .lastDone {
 	color: #808080;
 	font-style: italic;
 	text-align: right;
+	margin-left: auto;
+}
+
+.task .streakEndingSoon {
+	display: none;
 }
 
 .task .lastDone {
 	display: none;
 }
 
+.task:hover .streakEndingSoon {
+	display: inline;
+}
+
 .task:hover .lastDone {
-	display: block;
+	display: inline;
 }
 
 .hidden {
